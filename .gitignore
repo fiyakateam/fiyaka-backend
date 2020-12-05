@@ -1,4 +1,9 @@
 node_modules/
 config/
 dist/
+<<<<<<< HEAD
 *.cfg
+=======
+*.cfg
+.vscode/
+>>>>>>> cleared
