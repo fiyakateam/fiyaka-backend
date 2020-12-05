@@ -49,11 +49,11 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": [
+    "*.{js,ts,tsx,json}": [
       "eslint --fix"
     ]
   },
-  "jest":{
+  "jest": {
     "testEnvironment": "node"
   }
 }
