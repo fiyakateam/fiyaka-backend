@@ -1,7 +1,7 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 import validator from 'validator';
-import { ILandlord } from './landlord';
-import { ITenant } from './tenant';
+import jwt, { Secret } from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 export interface IUser extends mongoose.Document {
   name: string;
@@ -13,12 +13,12 @@ export interface IUser extends mongoose.Document {
       token: { type: string; required: true };
     }
   ];
-  _landlord: ILandlord['_id'];
-  _tenant: ITenant['_id'];
   timestamps: boolean;
+  generateAuthToken(): string;
+  toJSON(): any;
 }
 
-export const UserSchema: Schema = new mongoose.Schema({
+export const userSchema: mongoose.Schema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   email: {
     type: String,
@@ -36,10 +36,34 @@ export const UserSchema: Schema = new mongoose.Schema({
       token: { type: String, required: true },
     },
   ],
-  _landlord: { type: Schema.Types.ObjectId, ref: 'Landlord' },
-  _tenant: { type: Schema.Types.ObjectId, ref: 'Tenant' },
   timestamps: { type: Boolean, default: true },
 });
 
-const User = mongoose.model<IUser>('User', UserSchema);
-export default User;
+userSchema.methods.toJSON = function () {
+  const userObject = this.toObject();
+
+  delete userObject.password;
+  delete userObject.tokens;
+
+  return userObject;
+};
+
+userSchema.methods.generateAuthToken = async function (): Promise<string> {
+  const token = jwt.sign(
+    { _id: this._id.toString() },
+    process.env.JWT_SECRET as Secret
+  );
+
+  this.tokens = this.tokens.concat({ token });
+  await this.save();
+  return token;
+};
+
+userSchema.pre<IUser>('save', async function (next) {
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 8);
+  }
+  next(null);
+});
+
+export default userSchema;

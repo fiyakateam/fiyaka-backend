@@ -1,14 +1,14 @@
-import mongoose, { Schema } from 'mongoose';
-import { IUser } from './user';
+import mongoose from 'mongoose';
+import { userSchema, IUser } from './user';
 
-export interface ILandlord extends mongoose.Document {
-  _userSelf: IUser['_id'];
+export interface ILandlord extends IUser {
+  nick: string;
   // TODO add housees ref somehow ?
 }
 
-export const LandlordSchema: Schema = new mongoose.Schema({
-  _userSelf: { type: Schema.Types.ObjectId, ref: 'User' },
-});
+const landlordSchema: mongoose.Schema = new mongoose.Schema();
+landlordSchema.add(userSchema).add({ nick: 'string' });
 
-const Landlord = mongoose.model<ILandlord>('Landlord', LandlordSchema);
+const Landlord = mongoose.model<ILandlord>('Landlord', landlordSchema);
+
 export default Landlord;

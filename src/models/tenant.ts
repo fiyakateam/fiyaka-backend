@@ -1,14 +1,12 @@
 import mongoose, { Schema } from 'mongoose';
-import { IUser } from './user';
+import { userSchema, IUser } from './user';
 
-export interface ITenant extends mongoose.Document {
-  _userSelf: IUser['_id'];
-  // TODO add house somehow
+export interface ITenant extends IUser {
+  foo: 'string';
 }
 
-export const TenantSchema: Schema = new mongoose.Schema({
-  _userSelf: { type: Schema.Types.ObjectId, ref: 'User' },
-});
+const tenantSchema: Schema = new mongoose.Schema();
+tenantSchema.add(userSchema).add({ foo: 'string' });
 
-const Tenant = mongoose.model<ITenant>('Tenant', TenantSchema);
+const Tenant = mongoose.model<ITenant>('Tenant', tenantSchema);
 export default Tenant;
