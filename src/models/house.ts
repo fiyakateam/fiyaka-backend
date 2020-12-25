@@ -14,7 +14,7 @@ export const HouseSchema: Schema = new mongoose.Schema({
   name: { type: String, required: true },
   address: { type: String, required: true },
   currentRentalContract: { type: Buffer },
-  _owner: { type: Schema.Types.ObjectId, ref: 'Landlord' },
+  _owner: { type: Schema.Types.ObjectId, ref: 'Landlord', required: true },
   _occupant: { type: Schema.Types.ObjectId, ref: 'Tenant' },
 });
 
