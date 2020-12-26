@@ -77,12 +77,16 @@ tenantRouter.delete(
 
     try {
       const tenant = await Tenant.findOneAndDelete({ _id: req.params.id });
-
       if (!tenant) {
         return res.status(404).send();
       }
+
       const house = await House.findOne({ _occupant: tenant._id });
-      if (house) house.set('_occupant', undefined);
+      if (house) {
+        house.set('_occupant', undefined);
+      }
+
+      res.send(tenant);
     } catch (e: any) {
       res.status(500).send();
     }
