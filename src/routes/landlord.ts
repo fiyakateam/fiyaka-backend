@@ -5,7 +5,6 @@ const landlordRouter: express.Router = express.Router();
 
 landlordRouter.post(
   '/landlords',
-  auth,
   async (req: express.Request, res: express.Response) => {
     const landlord = new Landlord(req.body);
     try {
@@ -19,10 +18,9 @@ landlordRouter.post(
 );
 
 landlordRouter.get(
-  '/landlords',
-  auth,
+  '/landlords/login',
   async (req: express.Request, res: express.Response) => {
-    res.status(200).send({ some: 'json' });
+    res.status(400).send();
   }
 );
 
