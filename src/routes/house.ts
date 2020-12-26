@@ -33,7 +33,7 @@ houseRouter.post(
   async (req: express.Request, res: express.Response) => {
     const house = new House({
       ...req.body,
-      owner: req.user._id,
+      owner: req.body.user._id,
     });
     //TODO add landlord reference with using auth middleware
     try {
@@ -97,15 +97,15 @@ houseRouter.get(
   async (req: express.Request, res: express.Response) => {
     const _id = req.params.id;
     //if the requester a landlord or not
-    const isLandlord = req.user.isLandlord;
+    const isLandlord = req.body.user.isLandlord;
     let house: any;
 
     try {
       //user will be add to the request by auth
       if (isLandlord) {
-        house = await House.findOne({ _id, _owner: req.user._id });
+        house = await House.findOne({ _id, _owner: req.body.user._id });
       } else {
-        house = await House.findOne({ _id, _occupant: req.user._id });
+        house = await House.findOne({ _id, _occupant: req.body.user._id });
       }
 
       if (!house) {
@@ -148,13 +148,13 @@ houseRouter.patch(
   '/houses/:id',
   auth,
   async (req: express.Request, res: express.Response) => {
-    const updates = Objects.keys(req.body);
+    const updates = Object.keys(req.body);
     const allowedUpdates = ['name', 'address'];
     const isValidOperation = updates.every((update) =>
       allowedUpdates.includes(update)
     );
 
-    const isLandlord = req.user.isLandlord;
+    const isLandlord = req.body.user.isLandlord;
 
     if (!isLandlord) {
       return res.status(403).send();
@@ -167,14 +167,15 @@ houseRouter.patch(
     try {
       const house = await House.findOne({
         _id: req.params.id,
-        owner: req.user._id,
+        owner: req.body.user._id,
       });
 
       if (!house) {
         return res.status(404).send();
       }
 
-      updates.forEach((update) => (house[update] = req.body[update]));
+      //updates.forEach((update) => (house[update] = req.body[update]));
+      updates.forEach((update) => house.set(update, req.body[update]));
       await house.save();
       res.send(house);
     } catch (e) {
@@ -204,7 +205,7 @@ houseRouter.delete(
   'houses/:id',
   auth,
   async (req: express.Request, res: express.Response) => {
-    const isLandlord = req.user.isLandlord;
+    const isLandlord = req.body.user.isLandlord;
     if (!isLandlord) {
       return res.status(403).send();
     }
@@ -212,7 +213,7 @@ houseRouter.delete(
     try {
       const house = await House.findOneAndDelete({
         _id: req.params.id,
-        _owner: req.user._id,
+        _owner: req.body.user._id,
       });
 
       if (!house) {
