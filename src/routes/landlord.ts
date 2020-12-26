@@ -1,9 +1,11 @@
 import express from 'express';
 import Landlord from '../models/landlord';
-const router: express.Router = express.Router();
+import auth from '../middleware/auth';
+const landlordRouter: express.Router = express.Router();
 
-router.post(
+landlordRouter.post(
   '/landlords',
+  auth,
   async (req: express.Request, res: express.Response) => {
     const landlord = new Landlord(req.body);
     try {
@@ -16,11 +18,12 @@ router.post(
   }
 );
 
-router.get(
+landlordRouter.get(
   '/landlords',
+  auth,
   async (req: express.Request, res: express.Response) => {
     res.status(200).send({ some: 'json' });
   }
 );
 
-export default router;
+export default landlordRouter;
