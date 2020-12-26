@@ -52,11 +52,4 @@ router.post(
   }
 );
 
-router.get(
-  '/landlords',
-  async (req: express.Request, res: express.Response) => {
-    res.status(400).send();
-  }
-);
-
 export default router;

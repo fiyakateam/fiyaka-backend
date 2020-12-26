@@ -12,7 +12,7 @@ const swaggerOptions = {
       version: '1.0.0',
     },
   },
-  apis: ['app.js'],
+  apis: ['app.ts'],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
