@@ -13,15 +13,16 @@ tenantRouter.post(
       return res.status(403).send();
     }
 
-    const house = await House.findById(req.params.id);
-
-    if (!house) {
-      return res.status(404).send();
-    }
-
-    const tenant = new Tenant(req.body);
-    tenant.set('isLandlord', false);
     try {
+      const house = await House.findById(req.params.id);
+
+      if (!house) {
+        return res.status(404).send();
+      }
+
+      const tenant = new Tenant(req.body);
+      tenant.set('isLandlord', false);
+
       await tenant.save();
       house.set('_occupant', tenant._id);
       const token = await tenant.generateAuthToken();
@@ -58,6 +59,30 @@ tenantRouter.post(
         return token.token !== req.headers?.token;
       });
       await req.body.user.save();
+    } catch (e: any) {
+      res.status(500).send();
+    }
+  }
+);
+
+tenantRouter.delete(
+  '/tenants/:id',
+  auth,
+  async (req: express.Request, res: express.Response) => {
+    const isLandlord = req.body.user.isLandlord;
+
+    if (!isLandlord) {
+      return res.status(403).send();
+    }
+
+    try {
+      const tenant = await Tenant.findOneAndDelete({ _id: req.params.id });
+
+      if (!tenant) {
+        return res.status(404).send();
+      }
+      const house = await House.findOne({ _occupant: tenant._id });
+      if (house) house.set('_occupant', undefined);
     } catch (e: any) {
       res.status(500).send();
     }
@@ -138,4 +163,29 @@ export default tenantRouter;
  *           description:
  *         "400":
  *           description: Bad Request
+ */
+
+/**
+ * @swagger
+ * path:
+ *  /tenants/{id}:
+ *    delete:
+ *      summary: Delete a tenant
+ *      description: Only landlords can delete tenants.
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          required: true
+ *          schema:
+ *            type: string
+ *          description: Tenant id
+ *      responses:
+ *        "200":
+ *          description: Success
+ *        "403":
+ *          description: Forbidden
+ *        "404":
+ *          description: Not Found
+ *        "500":
+ *          description: Internal Error
  */
