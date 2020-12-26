@@ -8,6 +8,7 @@ export interface IUser extends mongoose.Document {
   email: string;
   password: string;
   age: number;
+  isLandlord: boolean;
   tokens: [
     {
       token: { type: string; required: true };
@@ -31,6 +32,7 @@ export const userSchema: mongoose.Schema = new mongoose.Schema({
   },
   password: { type: String, required: true, trim: true, minlength: 8 },
   age: { type: Number, default: 0 },
+  isLandlord: { type: Boolean, required: true },
   tokens: [
     {
       token: { type: String, required: true },
