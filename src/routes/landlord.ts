@@ -1,9 +1,9 @@
-import express from 'express';
+import express, { Request } from 'express';
 import Landlord from '../models/landlord';
-import auth from '../middleware/auth';
-const landlordRouter: express.Router = express.Router();
+import { auth } from '../middleware/auth';
+const router = express.Router();
 
-landlordRouter.post(
+router.post(
   '/landlords',
   async (req: express.Request, res: express.Response) => {
     const landlord = new Landlord(req.body);
@@ -17,11 +17,46 @@ landlordRouter.post(
   }
 );
 
-landlordRouter.get(
+router.post(
   '/landlords/login',
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const user = await Landlord.findByCredentials(
+        req.body.email,
+        req.body.password
+      );
+      const token = await user.generateAuthToken();
+      res.status(200).send({ user, token });
+    } catch (e: any) {
+      res.status(400).send();
+    }
+  }
+);
+
+router.post(
+  '/landlords/logout',
+  auth,
+  async (req: Request, res: express.Response) => {
+    try {
+      console.log(req.headers.token);
+      req.body.user.tokens = req.body.user.tokens.filter((token: any) => {
+        return token.token !== req.headers?.token;
+      });
+      console.log(req.body.user);
+      await req.body.user.save();
+
+      res.send('helo');
+    } catch (e) {
+      res.status(500).send();
+    }
+  }
+);
+
+router.get(
+  '/landlords',
   async (req: express.Request, res: express.Response) => {
     res.status(400).send();
   }
 );
 
-export default landlordRouter;
+export default router;

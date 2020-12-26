@@ -8,18 +8,13 @@ export interface IUser extends mongoose.Document {
   email: string;
   password: string;
   age: number;
-  isLandlord: boolean;
-  tokens: [
-    {
-      token: { type: string; required: true };
-    }
-  ];
+  tokens: { token: { type: string; required: true } }[];
   timestamps: boolean;
   generateAuthToken(): string;
   toJSON(): any;
 }
 
-export const userSchema: mongoose.Schema = new mongoose.Schema({
+export const userSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   email: {
     type: String,
