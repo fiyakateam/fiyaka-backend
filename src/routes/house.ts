@@ -38,7 +38,7 @@ houseRouter.post(
     //TODO add landlord reference with using auth middleware
     try {
       await house.save();
-      res.status(201).send({ house });
+      res.status(201).send(house);
     } catch (e) {
       res.status(400).send(e);
     }
@@ -65,15 +65,31 @@ houseRouter.get(
   async (req: express.Request, res: express.Response) => {
     const sort: any = {};
 
+    const isLandlord = req.body.user.isLandlord;
+
+    if (!isLandlord) {
+      return res.status(403).send();
+    }
+
     if (req.query.sortBy) {
       //split by : character
       const parts = (<string>req.query.sortBy).split(':');
       sort[parts[0]] = parts[1] === 'desc' ? -1 : 1;
     }
 
-    //TODO populate
     try {
-    } catch (e) {
+      await req.body.user
+        .populate({
+          path: 'houses',
+          options: {
+            limit: parseInt(req.query.limit as string),
+            skip: parseInt(req.query.skip as string),
+            sort,
+          },
+        })
+        .execPopulate();
+      res.send(req.body.user.houses);
+    } catch (e: any) {
       res.status(500).send(e);
     }
   }
