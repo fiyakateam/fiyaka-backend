@@ -1,18 +1,23 @@
 import sgMail from '@sendgrid/mail';
+import { sendGridApiKey, emailSource } from '../configToShow/env';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
+sgMail.setApiKey(sendGridApiKey);
 
 const sendCreationEmail = function (
   target: string,
   heading: string,
   body: string
 ) {
-  sgMail.send({
-    to: target,
-    from: process.env.EMAIL_SOURCE as string,
-    subject: heading,
-    text: body,
-  });
+  try {
+    sgMail.send({
+      to: target,
+      from: emailSource,
+      subject: heading,
+      text: body,
+    });
+  } catch (e: any) {
+    throw new Error(e);
+  }
 };
 
 export default sendCreationEmail;
