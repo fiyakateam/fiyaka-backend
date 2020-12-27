@@ -1,9 +1,7 @@
 import express from 'express';
-import Tenant, { ITenant } from '../models/tenant';
+import Tenant from '../models/tenant';
 import auth from '../middleware/auth';
-import House, { IHouse } from '../models/house';
-import Landlord from '../models/landlord';
-import { generateAuthToken } from '../services/auth';
+import House from '../models/house';
 const router: express.Router = express.Router();
 
 router.post(

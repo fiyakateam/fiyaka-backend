@@ -1,7 +1,6 @@
 import express from 'express';
 import House from '../models/house';
 import auth from '../middleware/auth';
-import Tenant from '../models/tenant';
 const router = express.Router();
 
 // TODO add auth for all of them

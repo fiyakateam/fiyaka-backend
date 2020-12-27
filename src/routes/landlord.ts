@@ -1,4 +1,4 @@
-import express, { Request } from 'express';
+import express from 'express';
 import Landlord from '../models/landlord';
 import { auth } from '../middleware/auth';
 import sendCreationEmail from '../services/email';
@@ -35,12 +35,6 @@ router.post(
   }
 );
 
-interface MyObj {
-  target: string;
-  heading: string;
-  body: string;
-}
-
 router.get(
   '/landlords/email',
   auth,
@@ -52,7 +46,7 @@ router.get(
 
       sendCreationEmail(req.body.target, req.body.heading, req.body.body);
       res.status(200).send();
-    } catch (e: any) {
+    } catch (e) {
       res.status(400).send(e);
     }
   }

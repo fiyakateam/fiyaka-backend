@@ -1,4 +1,4 @@
-import jwt, { Secret } from 'jsonwebtoken';
+import { Secret } from 'jsonwebtoken';
 
 const sendGridApiKey: string = process.env.SENDGRID_API_KEY as string;
 const emailSource: string = process.env.EMAIL_SOURCE as string;

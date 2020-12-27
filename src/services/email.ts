@@ -7,7 +7,7 @@ const sendCreationEmail = function (
   target: string,
   heading: string,
   body: string
-) {
+): void {
   try {
     sgMail.send({
       to: target,
@@ -15,7 +15,7 @@ const sendCreationEmail = function (
       subject: heading,
       text: body,
     });
-  } catch (e: any) {
+  } catch (e) {
     throw new Error(e);
   }
 };
