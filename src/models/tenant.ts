@@ -2,17 +2,17 @@ import mongoose, { Model, Schema } from 'mongoose';
 import { userSchema, IUser } from './user';
 import bcrypt from 'bcryptjs';
 
-export interface ITenant extends IUser {
-  foo: 'string';
-  findByCredentials(email: string, password: string): Promise<ITenant>;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ITenant extends IUser {}
 
 export interface ITenantModel extends Model<ITenant> {
   findByCredentials(email: string, password: string): Promise<ITenant>;
 }
 
 const tenantSchema: Schema = new mongoose.Schema();
-tenantSchema.add(userSchema).add({ foo: 'string' });
+tenantSchema
+  .add(userSchema)
+  .add({ role: { type: String, default: 'Landlord' } });
 
 tenantSchema.statics.findByCredentials = async (
   email: string,

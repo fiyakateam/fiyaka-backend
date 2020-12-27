@@ -1,18 +1,18 @@
 import mongoose, { Model } from 'mongoose';
 import { userSchema, IUser } from './user';
 import bcrypt from 'bcryptjs';
-import { IHouse } from './house';
 
-export interface ILandlord extends IUser {
-  houses: IHouse[];
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ILandlord extends IUser {}
 
 export interface ILandlordModel extends Model<ILandlord> {
   findByCredentials(email: string, password: string): Promise<ILandlord>;
 }
 
 const landlordSchema: mongoose.Schema = new mongoose.Schema();
-landlordSchema.add(userSchema).add({ nick: 'string' });
+landlordSchema.add(userSchema).add({
+  role: { type: String, default: 'Landlord' },
+});
 
 landlordSchema.virtual('houses', {
   ref: 'House',
