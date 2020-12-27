@@ -27,7 +27,7 @@ tenantRouter.post(
       house.set('_occupant', tenant._id);
       const token = await tenant.generateAuthToken();
       res.status(201).send({ tenant, token });
-    } catch (e: any) {
+    } catch (e) {
       res.status(400).send(e);
     }
   }
@@ -44,7 +44,7 @@ tenantRouter.post(
       );
       const token = await tenant.generateAuthToken();
       res.send({ tenant, token });
-    } catch (e: any) {
+    } catch (e) {
       res.status(400).send();
     }
   }
@@ -59,7 +59,7 @@ tenantRouter.post(
         return token.token !== req.headers?.token;
       });
       await req.body.user.save();
-    } catch (e: any) {
+    } catch (e) {
       res.status(500).send();
     }
   }
@@ -87,7 +87,7 @@ tenantRouter.delete(
       }
 
       res.send(tenant);
-    } catch (e: any) {
+    } catch (e) {
       res.status(500).send();
     }
   }

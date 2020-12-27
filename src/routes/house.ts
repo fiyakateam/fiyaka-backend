@@ -57,7 +57,7 @@ router.get(
         })
         .execPopulate();
       res.send(req.body.user.houses);
-    } catch (e: any) {
+    } catch (e) {
       res.status(500).send(e);
     }
   }
