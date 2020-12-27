@@ -48,7 +48,7 @@ router.get(
   }
 );
 
-router.get(
+/*router.get(
   '/landlords/forgot/:id',
   auth,
   async (req: express.Request, res: express.Response) => {
@@ -58,7 +58,7 @@ router.get(
       res.status(400);
     }
   }
-);
+);*/
 
 export default router;
 
