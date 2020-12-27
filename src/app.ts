@@ -5,13 +5,13 @@ import landlordRouter from './routes/landlord';
 import houseRouter from './routes/house';
 import tenantRouter from './routes/tenant';
 import authRouter from './routes/auth';
-import * as swaggerDocs from './swagger.json';
-import cors from 'cors';
+//import * as swaggerDocs from './swagger.json';
+//import cors from 'cors';
 
 const app: Application = express();
 
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
-app.use(cors());
+//app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+//app.use(cors());
 
 app.use(express.json());
 

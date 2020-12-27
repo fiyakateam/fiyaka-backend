@@ -14,7 +14,6 @@ router.post(
       ...req.body,
       _owner: req.body.user._id,
     });
-    //TODO add landlord reference with using auth middleware
     try {
       await house.save();
       res.status(201).send(house);
@@ -171,6 +170,11 @@ router.post(
       const t_id = req.body.tenant;
       const h_id = req.params.id;
       const house = await House.findById(h_id);
+      const tenant = await Tenant.findById(t_id);
+
+      if (!house || !tenant) {
+        return res.status(404).send();
+      }
 
       house?.set('_occupant', t_id);
       await house?.save();
