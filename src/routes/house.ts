@@ -4,10 +4,6 @@ import auth from '../middleware/auth';
 import { Mongoose } from 'mongoose';
 const houseRouter: express.Router = express.Router();
 
-houseRouter.get('/ping', (req: express.Request, res: express.Response) => {
-  res.status(200).send('pong');
-});
-
 // TODO add auth for all of them
 /**
  * @swagger
