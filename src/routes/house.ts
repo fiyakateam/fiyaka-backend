@@ -1,33 +1,11 @@
 import express from 'express';
 import House from '../models/house';
 import auth from '../middleware/auth';
-import { Mongoose } from 'mongoose';
-const houseRouter: express.Router = express.Router();
+const router = express.Router();
 
 // TODO add auth for all of them
-/**
- * @swagger
- * /houses:
- *    post:
- *      description: Create a house
- *      parameters:
- *        - name: name
- *          description: Name of the house
- *          in: formData
- *          required: true
- *          type: string
- *        - name: address
- *          description: Address of the house
- *          in: formData
- *          required: true
- *          type: string
- *      responses:
- *        201:
- *          description: Created
- *        400:
- *          description: Bad Request
- */
-houseRouter.post(
+
+router.post(
   '/houses',
   auth,
   async (req: express.Request, res: express.Response) => {
@@ -48,18 +26,8 @@ houseRouter.post(
 // GET /houses?limit=n&skip=y //for n pages at each request
 //skip=y to skip y number of requests
 //GET /houses?sortBy=createdAt_asc/_desc //to specify the sorting criteria
-/**
- * @swagger
- * /houses:
- *    get:
- *      description: Get all houses
- *      responses:
- *        200:
- *          description: Success
- *        500:
- *          description: Internal Error
- */
-houseRouter.get(
+
+router.get(
   '/houses',
   auth,
   async (req: express.Request, res: express.Response) => {
@@ -78,20 +46,8 @@ houseRouter.get(
     }
   }
 );
-/**
- * @swagger
- * /houses/{id}:
- *    get:
- *      description: Get a house by id
- *      responses:
- *        200:
- *          description: Success
- *        404:
- *          description: House not found
- *        500:
- *          description: Internal Error
- */
-houseRouter.get(
+
+router.get(
   '/houses/:id',
   auth,
   async (req: express.Request, res: express.Response) => {
@@ -118,33 +74,7 @@ houseRouter.get(
   }
 );
 
-/**
- * @swagger
- * /houses/{id}:
- *    patch:
- *      description: Update a house by id
- *      parameters:
- *        - name: name
- *          description: Updated name
- *          in: formData
- *          type: string
- *        - name: address
- *          description: Updated address
- *          in: formData
- *          type: string
- *      responses:
- *        200:
- *          description: Success
- *        400:
- *          description: Bad Request
- *        403:
- *          description: Forbidden
- *        404:
- *          description: House not found
- *        500:
- *          description: Internal Error
- */
-houseRouter.patch(
+router.patch(
   '/houses/:id',
   auth,
   async (req: express.Request, res: express.Response) => {
@@ -184,24 +114,7 @@ houseRouter.patch(
   }
 );
 
-/**
- * @swagger
- * /houses/{id}:
- *    delete:
- *      description: Delete a house by id
- *      responses:
- *        200:
- *          description: Success
- *        400:
- *          description: Bad Request
- *        403:
- *          description: Forbidden
- *        404:
- *          description: House not found
- *        500:
- *          description: Internal Error
- */
-houseRouter.delete(
+router.delete(
   'houses/:id',
   auth,
   async (req: express.Request, res: express.Response) => {
@@ -227,4 +140,93 @@ houseRouter.delete(
   }
 );
 
-export default houseRouter;
+export default router;
+
+/**
+ * @swagger
+ * tags:
+ *   name: House
+ */
+/**
+ * @swagger
+ * /houses:
+ *    post:
+ *      description: Create a house
+ *      tags: [House]
+ *      parameters:
+ *        - name: name
+ *          description: Name of the house
+ *          in: formData
+ *          required: true
+ *          type: string
+ *        - name: address
+ *          description: Address of the house
+ *          in: formData
+ *          required: true
+ *          type: string
+ *      responses:
+ *        201:
+ *          description: Created
+ *        400:
+ *          description: Bad Request
+ *    get:
+ *      description: Get all houses
+ *      tags: [House]
+ *      responses:
+ *        200:
+ *          description: Success
+ *        500:
+ *          description: Internal Error
+ */
+
+/**
+ * @swagger
+ * /houses/{id}:
+ *    get:
+ *      description: Get a house by id
+ *      tags: [House]
+ *      responses:
+ *        200:
+ *          description: Success
+ *        404:
+ *          description: House not found
+ *        500:
+ *          description: Internal Error
+ *    patch:
+ *      description: Update a house by id
+ *      tags: [House]
+ *      parameters:
+ *        - name: name
+ *          description: Updated name
+ *          in: formData
+ *          type: string
+ *        - name: address
+ *          description: Updated address
+ *          in: formData
+ *          type: string
+ *      responses:
+ *        200:
+ *          description: Success
+ *        400:
+ *          description: Bad Request
+ *        403:
+ *          description: Forbidden
+ *        404:
+ *          description: House not found
+ *        500:
+ *          description: Internal Error
+ *    delete:
+ *      description: Delete a house by id
+ *      tags: [House]
+ *      responses:
+ *        200:
+ *          description: Success
+ *        400:
+ *          description: Bad Request
+ *        403:
+ *          description: Forbidden
+ *        404:
+ *          description: House not found
+ *        500:
+ *          description: Internal Error
+ */
