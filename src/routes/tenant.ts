@@ -1,7 +1,8 @@
 import express from 'express';
-import Tenant from '../models/tenant';
+import Tenant, { ITenant } from '../models/tenant';
 import auth from '../middleware/auth';
 import House, { IHouse } from '../models/house';
+import Landlord from '../models/landlord';
 const router: express.Router = express.Router();
 
 router.post(
@@ -14,18 +15,14 @@ router.post(
     }
 
     try {
-      const house = await House.findById(req.params.id);
-
-      if (!house) {
-        return res.status(404).send();
-      }
-
+      const pass: string = Math.random().toString(16).substr(2, 8);
+      req.body.isLandlord = false;
+      req.body._landlord = req.body.user._id;
+      req.body.password = pass;
       const tenant = new Tenant(req.body);
-      tenant.set('isLandlord', false);
 
       await tenant.save();
-      house.set('_occupant', tenant._id);
-      res.status(201).send({ tenant });
+      res.status(201).send({ tenant, pass });
     } catch (e) {
       res.status(400).send(e);
     }
@@ -51,6 +48,7 @@ router.delete(
       const house = await House.findOne({ _occupant: tenant._id });
       if (house) {
         house.set('_occupant', undefined);
+        await house.save();
       }
 
       res.send(tenant);
@@ -66,15 +64,6 @@ router.get(
   async (req: express.Request, res: express.Response) => {
     try {
       const _id = req.params.id;
-      const house = await House.findOne({
-        _occupant: _id,
-        _owner: req.body.user._id,
-      });
-
-      if (!house) {
-        return res.status(404).send();
-      }
-
       const tenant = await Tenant.findOne({ _id });
       if (!tenant) {
         return res.status(404).send();
@@ -82,6 +71,26 @@ router.get(
       res.send(tenant);
     } catch (e: any) {
       res.status(400).send(e);
+    }
+  }
+);
+
+router.get(
+  '/tenants',
+  auth,
+  async (req: express.Request, res: express.Response) => {
+    //TODO pagination ?
+    try {
+      const isLandlord = req.body.user.isLandlord;
+      if (!isLandlord) {
+        return res.status(403).send();
+      }
+
+      await req.body.user.populate('tenants').execPopulate();
+
+      res.send(req.body.user.tenants);
+    } catch (e: any) {
+      res.status(500).send(e);
     }
   }
 );
