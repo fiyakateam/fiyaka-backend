@@ -97,11 +97,16 @@ export default tenantRouter;
 
 /**
  * @swagger
- * path:
+ * tags:
+ *   name: Tenant
+ */
+/**
+ * @swagger
  *  /tenants:
  *    post:
  *      summary: Create a tenant
  *      description: Only landlords can create tenants.
+ *      tags: [Tenant]
  *      requestBody:
  *        required: true
  *        content:
@@ -141,10 +146,10 @@ export default tenantRouter;
 
 /**
  * @swagger
- * path:
  *   /tenants/login:
  *     post:
  *       description: Login a tenant
+ *       tags: [Tenant]
  *       requestBody:
  *         required: true
  *         content:
@@ -171,11 +176,11 @@ export default tenantRouter;
 
 /**
  * @swagger
- * path:
  *  /tenants/{id}:
  *    delete:
  *      summary: Delete a tenant
  *      description: Only landlords can delete tenants.
+ *      tags: [Tenant]
  *      parameters:
  *        - in: path
  *          name: id
