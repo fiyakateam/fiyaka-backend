@@ -11,7 +11,7 @@ router.post(
       await landlord.save();
       const token = await landlord.generateAuthToken();
       res.status(201).send({ landlord, token });
-    } catch (e: any) {
+    } catch (e) {
       res.status(400).send(e);
     }
   }
@@ -27,7 +27,7 @@ router.post(
       );
       const token = await user.generateAuthToken();
       res.status(200).send({ user, token });
-    } catch (e: any) {
+    } catch (e) {
       res.status(400).send();
     }
   }
@@ -52,11 +52,6 @@ router.post(
   }
 );
 
-router.get(
-  '/landlords',
-  async (req: express.Request, res: express.Response) => {
-    res.status(400).send();
-  }
-);
+export default router;
 
 export default router;
