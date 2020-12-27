@@ -45,6 +45,10 @@ router.get(
   auth,
   (req: express.Request, res: express.Response) => {
     try {
+      if (!req.body.user.isLandlord) {
+        return res.status(403).send();
+      }
+
       sendCreationEmail(req.body.target, req.body.heading, req.body.body);
       res.status(200).send();
     } catch (e: any) {
