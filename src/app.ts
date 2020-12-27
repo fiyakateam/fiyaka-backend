@@ -4,6 +4,7 @@ import swaggerUI from 'swagger-ui-express';
 require('./db/mongoose');
 import landlordRouter from './routes/landlord';
 import houseRouter from './routes/house';
+import authRouter from './routes/auth';
 const app: Application = express();
 
 const swaggerOptions = {
@@ -23,5 +24,6 @@ app.use(express.json());
 
 app.use(landlordRouter);
 app.use(houseRouter);
+app.use(authRouter);
 
 export default app;
