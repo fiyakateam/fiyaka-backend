@@ -34,16 +34,21 @@ router.post(
   }
 );
 
+interface MyObj {
+  target: string;
+  heading: string;
+  body: string;
+}
+
 router.get(
   '/landlords/email',
   auth,
   (req: express.Request, res: express.Response) => {
     try {
-      const obj = JSON.parse(req.body);
-      sendCreationEmail(obj.target, obj.heading, obj.body);
+      sendCreationEmail(req.body.target, req.body.heading, req.body.body);
       res.status(200).send();
     } catch (e: any) {
-      res.status(400).send();
+      res.status(400).send(e);
     }
   }
 );
