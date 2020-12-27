@@ -4,7 +4,6 @@ import bcrypt from 'bcryptjs';
 import { ILandlord } from './landlord';
 
 export interface ITenant extends IUser {
-  foo: 'string';
   _landlord: ILandlord['_id'];
   findByCredentials(email: string, password: string): Promise<ITenant>;
 }
@@ -16,7 +15,7 @@ export interface ITenantModel extends Model<ITenant> {
 const tenantSchema: Schema = new mongoose.Schema({
   _landlord: { type: Schema.Types.ObjectId, ref: 'Landlord', required: true },
 });
-tenantSchema.add(userSchema).add({ foo: 'string' });
+tenantSchema.add(userSchema).add({ role: { type: String, default: 'Tenant' } });
 
 tenantSchema.statics.findByCredentials = async (
   email: string,

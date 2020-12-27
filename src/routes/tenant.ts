@@ -3,6 +3,7 @@ import Tenant, { ITenant } from '../models/tenant';
 import auth from '../middleware/auth';
 import House, { IHouse } from '../models/house';
 import Landlord from '../models/landlord';
+import { generateAuthToken } from '../services/auth';
 const router: express.Router = express.Router();
 
 router.post(

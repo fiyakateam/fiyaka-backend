@@ -7,9 +7,8 @@ export interface IUser extends mongoose.Document {
   name: string;
   email: string;
   password: string;
-  tokens: { token: { type: string; required: true } }[];
   timestamps: boolean;
-  generateAuthToken(): string;
+  role: string;
   toJSON(): any;
 }
 
@@ -41,17 +40,6 @@ userSchema.methods.toJSON = function () {
   delete userObject.tokens;
 
   return userObject;
-};
-
-userSchema.methods.generateAuthToken = async function (): Promise<string> {
-  const token = jwt.sign(
-    { _id: this._id.toString() },
-    process.env.JWT_SECRET as Secret
-  );
-
-  this.tokens = this.tokens.concat({ token });
-  await this.save();
-  return token;
 };
 
 userSchema.pre<IUser>('save', async function (next) {

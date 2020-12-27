@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import Landlord from '../models/landlord';
 import Tenant from '../models/tenant';
+import { verifyAuthToken } from '../services/auth';
 
 export const auth = async (
   req: Request,
@@ -9,26 +9,21 @@ export const auth = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    const decoded: any = jwt.verify(
-      token as string,
-      process.env.JWT_SECRET as string
-    );
-    const user =
-      (await Landlord.findOne({
-        _id: decoded._id,
-        'tokens.token': token,
-      })) ||
-      (await Tenant.findOne({
-        _id: decoded._id,
-        'tokens.token': token,
-      }));
+    const token = req.header('Authorization')?.replace('Bearer ', '') as string;
+    const decoded = verifyAuthToken(token);
 
+    if (!decoded.role) {
+      throw new Error();
+    }
+    const user =
+      decoded.role === 'Landlord'
+        ? await Landlord.findById(decoded._id)
+        : await Tenant.findById(decoded._id);
     if (!user) {
       throw new Error();
     }
 
-    req.headers.token = token as string;
+    req.headers.token = token;
     req.body.user = user;
     next();
   } catch (e) {

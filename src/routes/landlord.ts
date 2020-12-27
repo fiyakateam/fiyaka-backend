@@ -2,6 +2,7 @@ import express, { Request } from 'express';
 import Landlord from '../models/landlord';
 import { auth } from '../middleware/auth';
 import sendCreationEmail from '../services/email';
+import { generateAuthToken } from '../services/auth';
 const router = express.Router();
 
 router.post(
@@ -10,7 +11,7 @@ router.post(
     try {
       const landlord = new Landlord(req.body);
       await landlord.save();
-      const token = await landlord.generateAuthToken();
+      const token = generateAuthToken(landlord._id, landlord.role);
       res.status(201).send({ landlord, token });
     } catch (e) {
       res.status(400).send(e);
@@ -26,7 +27,7 @@ router.post(
         req.body.email,
         req.body.password
       );
-      const token = await user.generateAuthToken();
+      const token = generateAuthToken(user._id, user.role);
       res.status(200).send({ user, token });
     } catch (e) {
       res.status(400).send();
