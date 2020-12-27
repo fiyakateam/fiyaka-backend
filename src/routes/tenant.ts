@@ -2,6 +2,7 @@ import express from 'express';
 import Tenant from '../models/tenant';
 import auth from '../middleware/auth';
 import House from '../models/house';
+import { generateAuthToken } from '../services/auth';
 const tenantRouter: express.Router = express.Router();
 
 tenantRouter.post(
@@ -25,7 +26,7 @@ tenantRouter.post(
 
       await tenant.save();
       house.set('_occupant', tenant._id);
-      const token = await tenant.generateAuthToken();
+      const token = generateAuthToken(tenant._id, tenant.role);
       res.status(201).send({ tenant, token });
     } catch (e) {
       res.status(400).send(e);

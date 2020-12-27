@@ -1,6 +1,7 @@
 import express, { Request } from 'express';
 import Landlord from '../models/landlord';
 import { auth } from '../middleware/auth';
+import { generateAuthToken } from '../services/auth';
 const router = express.Router();
 
 export default router;
