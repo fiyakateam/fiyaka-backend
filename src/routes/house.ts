@@ -11,7 +11,7 @@ router.post(
   async (req: express.Request, res: express.Response) => {
     const house = new House({
       ...req.body,
-      owner: req.body.user._id,
+      _owner: req.body.user._id,
     });
     //TODO add landlord reference with using auth middleware
     try {
