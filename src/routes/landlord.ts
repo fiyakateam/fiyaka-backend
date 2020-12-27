@@ -1,13 +1,14 @@
 import express, { Request } from 'express';
 import Landlord from '../models/landlord';
 import { auth } from '../middleware/auth';
+import sendCreationEmail from '../services/email';
 const router = express.Router();
 
 router.post(
   '/landlords',
   async (req: express.Request, res: express.Response) => {
-    const landlord = new Landlord(req.body);
     try {
+      const landlord = new Landlord(req.body);
       await landlord.save();
       const token = await landlord.generateAuthToken();
       res.status(201).send({ landlord, token });
@@ -33,21 +34,28 @@ router.post(
   }
 );
 
-router.post(
-  '/landlords/logout',
+router.get(
+  '/landlords/email',
   auth,
-  async (req: Request, res: express.Response) => {
+  (req: express.Request, res: express.Response) => {
     try {
-      console.log(req.headers.token);
-      req.body.user.tokens = req.body.user.tokens.filter((token: any) => {
-        return token.token !== req.headers?.token;
-      });
-      console.log(req.body.user);
-      await req.body.user.save();
+      const obj = JSON.parse(req.body);
+      sendCreationEmail(obj.target, obj.heading, obj.body);
+      res.status(200).send();
+    } catch (e: any) {
+      res.status(400).send();
+    }
+  }
+);
 
-      res.send('helo');
-    } catch (e) {
-      res.status(500).send();
+router.get(
+  '/landlords/forgot/:id',
+  auth,
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const landlord = await Landlord.findById();
+    } catch (e: any) {
+      res.status(400);
     }
   }
 );
