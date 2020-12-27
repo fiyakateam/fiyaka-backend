@@ -20,6 +20,12 @@ landlordSchema.virtual('houses', {
   foreignField: '_owner',
 });
 
+landlordSchema.virtual('tenants', {
+  ref: 'Tenant',
+  localField: '_id',
+  foreignField: '_landlord',
+});
+
 landlordSchema.statics.findByCredentials = async (
   email: string,
   password: string
