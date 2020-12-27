@@ -68,7 +68,7 @@ router.get(
         return res.status(404).send();
       }
       res.send(tenant);
-    } catch (e: any) {
+    } catch (e) {
       res.status(400).send(e);
     }
   }
@@ -88,7 +88,7 @@ router.get(
       await req.body.user.populate('tenants').execPopulate();
 
       res.send(req.body.user.tenants);
-    } catch (e: any) {
+    } catch (e) {
       res.status(500).send(e);
     }
   }

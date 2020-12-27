@@ -24,11 +24,6 @@ export const userSchema = new mongoose.Schema({
   },
   password: { type: String, required: true, trim: true, minlength: 8 },
   isLandlord: { type: Boolean, required: true },
-  tokens: [
-    {
-      token: { type: String, required: true },
-    },
-  ],
   timestamps: { type: Boolean, default: true },
 });
 

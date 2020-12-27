@@ -70,15 +70,13 @@ router.get(
     const _id = req.params.id;
     //if the requester a landlord or not
     const isLandlord = req.body.user.isLandlord;
-    let house: any;
 
     try {
       //user will be add to the request by auth
-      if (isLandlord) {
-        house = await House.findOne({ _id, _owner: req.body.user._id });
-      } else {
-        house = await House.findOne({ _id, _occupant: req.body.user._id });
-      }
+
+      const house = isLandlord
+        ? await House.findOne({ _id, _owner: req.body.user._id })
+        : await House.findOne({ _id, _occupant: req.body.user._id });
 
       if (!house) {
         return res.status(404).send();
@@ -174,7 +172,7 @@ router.post(
       house?.set('_occupant', t_id);
       await house?.save();
       res.send();
-    } catch (e: any) {
+    } catch (e) {
       res.status(400).send(e);
     }
   }
