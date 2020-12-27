@@ -1,11 +1,10 @@
 import mongoose, { Model } from 'mongoose';
 import { userSchema, IUser } from './user';
 import bcrypt from 'bcryptjs';
+import { IHouse } from './house';
 
 export interface ILandlord extends IUser {
-  nick: string;
-  findByCredentials(email: string, password: string): Promise<ILandlord>;
-  // TODO add housees ref somehow ?
+  houses: IHouse[];
 }
 
 export interface ILandlordModel extends Model<ILandlord> {
