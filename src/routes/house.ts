@@ -1,6 +1,7 @@
 import express from 'express';
 import House from '../models/house';
 import auth from '../middleware/auth';
+import Tenant from '../models/tenant';
 const router = express.Router();
 
 // TODO add auth for all of them
@@ -131,7 +132,7 @@ router.patch(
 );
 
 router.delete(
-  'houses/:id',
+  '/houses/:id',
   auth,
   async (req: express.Request, res: express.Response) => {
     const isLandlord = req.body.user.isLandlord;
@@ -140,7 +141,13 @@ router.delete(
     }
 
     try {
-      const house = await House.findOneAndDelete({
+      let house = await House.findById(req.params.id);
+
+      if (house?._occupant !== undefined) {
+        return res.status(403).send();
+      }
+
+      house = await House.findOneAndDelete({
         _id: req.params.id,
         _owner: req.body.user._id,
       });
@@ -152,6 +159,24 @@ router.delete(
       res.send(house);
     } catch (e) {
       res.status(500).send(e);
+    }
+  }
+);
+
+router.post(
+  '/houses/:id/assign',
+  auth,
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const t_id = req.body.tenant;
+      const h_id = req.params.id;
+      const house = await House.findById(h_id);
+
+      house?.set('_occupant', t_id);
+      await house?.save();
+      res.send();
+    } catch (e: any) {
+      res.status(400).send(e);
     }
   }
 );
