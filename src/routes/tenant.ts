@@ -1,10 +1,10 @@
 import express from 'express';
 import Tenant from '../models/tenant';
 import auth from '../middleware/auth';
-import House from '../models/house';
-const tenantRouter: express.Router = express.Router();
+import House, { IHouse } from '../models/house';
+const router: express.Router = express.Router();
 
-tenantRouter.post(
+router.post(
   '/tenants',
   auth,
   async (req: express.Request, res: express.Response) => {
@@ -25,57 +25,24 @@ tenantRouter.post(
 
       await tenant.save();
       house.set('_occupant', tenant._id);
-      const token = await tenant.generateAuthToken();
-      res.status(201).send({ tenant, token });
+      res.status(201).send({ tenant });
     } catch (e) {
       res.status(400).send(e);
     }
   }
 );
 
-tenantRouter.post(
-  '/tenants/login',
-  auth,
-  async (req: express.Request, res: express.Response) => {
-    try {
-      const tenant = await Tenant.findByCredentials(
-        req.body.email,
-        req.body.password
-      );
-      const token = await tenant.generateAuthToken();
-      res.send({ tenant, token });
-    } catch (e) {
-      res.status(400).send();
-    }
-  }
-);
-
-tenantRouter.post(
-  '/tenants/logout',
-  auth,
-  async (req: express.Request, res: express.Response) => {
-    try {
-      req.body.user.tokens = req.body.user.tokens.filter((token: any) => {
-        return token.token !== req.headers?.token;
-      });
-      await req.body.user.save();
-    } catch (e) {
-      res.status(500).send();
-    }
-  }
-);
-
-tenantRouter.delete(
+router.delete(
   '/tenants/:id',
   auth,
   async (req: express.Request, res: express.Response) => {
-    const isLandlord = req.body.user.isLandlord;
-
-    if (!isLandlord) {
-      return res.status(403).send();
-    }
-
     try {
+      const isLandlord = req.body.user.isLandlord;
+
+      if (!isLandlord) {
+        return res.status(403).send();
+      }
+
       const tenant = await Tenant.findOneAndDelete({ _id: req.params.id });
       if (!tenant) {
         return res.status(404).send();
@@ -93,7 +60,33 @@ tenantRouter.delete(
   }
 );
 
-export default tenantRouter;
+router.get(
+  '/tenants/:id',
+  auth,
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const _id = req.params.id;
+      const house = await House.findOne({
+        _occupant: _id,
+        _owner: req.body.user._id,
+      });
+
+      if (!house) {
+        return res.status(404).send();
+      }
+
+      const tenant = await Tenant.findOne({ _id });
+      if (!tenant) {
+        return res.status(404).send();
+      }
+      res.send(tenant);
+    } catch (e: any) {
+      res.status(400).send(e);
+    }
+  }
+);
+
+export default router;
 
 /**
  * @swagger
