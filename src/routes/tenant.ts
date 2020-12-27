@@ -33,38 +33,6 @@ tenantRouter.post(
   }
 );
 
-tenantRouter.post(
-  '/tenants/login',
-  auth,
-  async (req: express.Request, res: express.Response) => {
-    try {
-      const tenant = await Tenant.findByCredentials(
-        req.body.email,
-        req.body.password
-      );
-      const token = await tenant.generateAuthToken();
-      res.send({ tenant, token });
-    } catch (e) {
-      res.status(400).send();
-    }
-  }
-);
-
-tenantRouter.post(
-  '/tenants/logout',
-  auth,
-  async (req: express.Request, res: express.Response) => {
-    try {
-      req.body.user.tokens = req.body.user.tokens.filter((token: any) => {
-        return token.token !== req.headers?.token;
-      });
-      await req.body.user.save();
-    } catch (e) {
-      res.status(500).send();
-    }
-  }
-);
-
 tenantRouter.delete(
   '/tenants/:id',
   auth,
