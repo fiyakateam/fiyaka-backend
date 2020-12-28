@@ -1,9 +1,7 @@
 import express from 'express';
-import Tenant, { ITenant } from '../models/tenant';
+import Tenant from '../models/tenant';
 import auth from '../middleware/auth';
-import House, { IHouse } from '../models/house';
-import Landlord from '../models/landlord';
-import { generateAuthToken } from '../services/auth';
+import House from '../models/house';
 const router: express.Router = express.Router();
 
 router.post(
@@ -70,7 +68,7 @@ router.get(
         return res.status(404).send();
       }
       res.send(tenant);
-    } catch (e: any) {
+    } catch (e) {
       res.status(400).send(e);
     }
   }
@@ -90,7 +88,7 @@ router.get(
       await req.body.user.populate('tenants').execPopulate();
 
       res.send(req.body.user.tenants);
-    } catch (e: any) {
+    } catch (e) {
       res.status(500).send(e);
     }
   }

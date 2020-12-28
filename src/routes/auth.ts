@@ -10,7 +10,7 @@ router.post(
     const landlord = new Landlord(req.body);
     try {
       await landlord.save();
-      const token = await generateAuthToken(landlord._id, landlord.role);
+      const token = generateAuthToken(landlord._id, landlord.role);
       res.status(201).send({ landlord, token });
     } catch (e) {
       res.status(400).send(e);
@@ -25,7 +25,7 @@ router.post(
       const user =
         (await Landlord.findByCredentials(req.body.email, req.body.password)) ||
         (await Tenant.findByCredentials(req.body.email, req.body.password));
-      const token = await generateAuthToken(user._id, user.role);
+      const token = generateAuthToken(user._id, user.role);
       res.status(201).send({ user, token });
     } catch (e) {
       res.status(400).send(e);
