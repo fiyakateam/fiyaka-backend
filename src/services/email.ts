@@ -3,13 +3,13 @@ import { sendGridApiKey, emailSource } from '../configToShow/env';
 
 sgMail.setApiKey(sendGridApiKey);
 
-const sendCreationEmail = function (
+const sendCreationEmail = async function (
   target: string,
   heading: string,
   body: string
-): void {
+): Promise<void> {
   try {
-    sgMail.send({
+    await sgMail.send({
       to: target,
       from: emailSource,
       subject: heading,

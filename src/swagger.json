@@ -241,6 +241,55 @@
           }
         }
       }
+    },
+    "/tenants": {
+      "get": {
+        "tags": ["Tenant"],
+        "security": {
+          "bearerAuth": []
+        },
+        "summary": "Get a list of all the tenants of logged in landlord",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Not allowed"
+          },
+          "500": {
+            "description": "Cannot find/server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tenant"],
+        "security": {
+          "bearerAuth": []
+        },
+        "summary": "Create a tenant under logged in landlord",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "403": {
+            "description": "Not allowed"
+          },
+          "500": {
+            "description": "Cannot find/server error"
+          }
+        },
+        "requestBody": {
+          "description": "House info",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/house"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

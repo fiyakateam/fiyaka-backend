@@ -6,13 +6,13 @@ const router = express.Router();
 router.post(
   '/landlords/email',
   auth,
-  (req: express.Request, res: express.Response) => {
+  async (req: express.Request, res: express.Response) => {
     try {
       if (!req.body.user.isLandlord) {
         return res.status(403).send();
       }
 
-      sendCreationEmail(req.body.target, req.body.heading, req.body.body);
+      await sendCreationEmail(req.body.target, req.body.heading, req.body.body);
       res.status(200).send();
     } catch (e) {
       res.status(400).send(e);
