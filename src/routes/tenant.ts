@@ -4,6 +4,26 @@ import auth from '../middleware/auth';
 import House from '../models/house';
 const router: express.Router = express.Router();
 
+router.get(
+  '/tenants',
+  auth,
+  async (req: express.Request, res: express.Response) => {
+    //TODO pagination ?
+    try {
+      const isLandlord = req.body.user.isLandlord;
+      if (!isLandlord) {
+        return res.status(403).send();
+      }
+
+      await req.body.user.populate('tenants').execPopulate();
+
+      res.send(req.body.user.tenants);
+    } catch (e) {
+      res.status(500).send(e);
+    }
+  }
+);
+
 router.post(
   '/tenants',
   auth,
@@ -22,6 +42,23 @@ router.post(
 
       await tenant.save();
       res.status(201).send({ tenant, pass });
+    } catch (e) {
+      res.status(400).send(e);
+    }
+  }
+);
+
+router.get(
+  '/tenants/:id',
+  auth,
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const _id = req.params.id;
+      const tenant = await Tenant.findOne({ _id });
+      if (!tenant) {
+        return res.status(404).send();
+      }
+      res.send(tenant);
     } catch (e) {
       res.status(400).send(e);
     }
@@ -53,43 +90,6 @@ router.delete(
       res.send(tenant);
     } catch (e) {
       res.status(500).send();
-    }
-  }
-);
-
-router.get(
-  '/tenants/:id',
-  auth,
-  async (req: express.Request, res: express.Response) => {
-    try {
-      const _id = req.params.id;
-      const tenant = await Tenant.findOne({ _id });
-      if (!tenant) {
-        return res.status(404).send();
-      }
-      res.send(tenant);
-    } catch (e) {
-      res.status(400).send(e);
-    }
-  }
-);
-
-router.get(
-  '/tenants',
-  auth,
-  async (req: express.Request, res: express.Response) => {
-    //TODO pagination ?
-    try {
-      const isLandlord = req.body.user.isLandlord;
-      if (!isLandlord) {
-        return res.status(403).send();
-      }
-
-      await req.body.user.populate('tenants').execPopulate();
-
-      res.send(req.body.user.tenants);
-    } catch (e) {
-      res.status(500).send(e);
     }
   }
 );
