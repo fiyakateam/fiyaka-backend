@@ -120,34 +120,6 @@
           "type": "string"
         }
       }
-    },
-    "Cat": {
-      "type": "object",
-      "properties": {
-        "genus": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "isHungry": {
-          "type": "boolean"
-        },
-        "lastFedDate": {
-          "type": "string"
-        }
-      }
-    },
-    "Cats": {
-      "type": "object",
-      "properties": {
-        "cats": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/Cat"
-          }
-        }
-      }
     }
   }
 }
