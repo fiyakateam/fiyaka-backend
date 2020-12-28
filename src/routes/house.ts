@@ -94,7 +94,7 @@ router.get(
   }
 );
 
-router.patch(
+router.put(
   '/houses/:id',
   auth,
   async (req: express.Request, res: express.Response) => {
@@ -190,92 +190,3 @@ router.post(
 );
 
 export default router;
-
-/**
- * @swagger
- * tags:
- *   name: House
- */
-/**
- * @swagger
- * /houses:
- *    post:
- *      description: Create a house
- *      tags: [House]
- *      parameters:
- *        - name: name
- *          description: Name of the house
- *          in: formData
- *          required: true
- *          type: string
- *        - name: address
- *          description: Address of the house
- *          in: formData
- *          required: true
- *          type: string
- *      responses:
- *        201:
- *          description: Created
- *        400:
- *          description: Bad Request
- *    get:
- *      description: Get all houses
- *      tags: [House]
- *      responses:
- *        200:
- *          description: Success
- *        500:
- *          description: Internal Error
- */
-
-/**
- * @swagger
- * /houses/{id}:
- *    get:
- *      description: Get a house by id
- *      tags: [House]
- *      responses:
- *        200:
- *          description: Success
- *        404:
- *          description: House not found
- *        500:
- *          description: Internal Error
- *    patch:
- *      description: Update a house by id
- *      tags: [House]
- *      parameters:
- *        - name: name
- *          description: Updated name
- *          in: formData
- *          type: string
- *        - name: address
- *          description: Updated address
- *          in: formData
- *          type: string
- *      responses:
- *        200:
- *          description: Success
- *        400:
- *          description: Bad Request
- *        403:
- *          description: Forbidden
- *        404:
- *          description: House not found
- *        500:
- *          description: Internal Error
- *    delete:
- *      description: Delete a house by id
- *      tags: [House]
- *      responses:
- *        200:
- *          description: Success
- *        400:
- *          description: Bad Request
- *        403:
- *          description: Forbidden
- *        404:
- *          description: House not found
- *        500:
- *          description: Internal Error
- */

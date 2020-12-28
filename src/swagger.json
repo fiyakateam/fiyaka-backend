@@ -86,12 +86,194 @@
           }
         }
       }
+    },
+    "/houses": {
+      "get": {
+        "tags": ["House"],
+        "security": {
+          "bearerAuth": []
+        },
+        "summary": "Get a list of all the houses in the system",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Cannot find/server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["House"],
+        "security": {
+          "bearerAuth": []
+        },
+        "summary": "Create a house in the system",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Cannot find/server error"
+          }
+        },
+        "requestBody": {
+          "description": "House info",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/house"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/houses/{id}": {
+      "tags": ["House"],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the house to search",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["House"],
+        "security": {
+          "bearerAuth": []
+        },
+        "summary": "Get the house with the given id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Cannot find/server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["House"],
+        "security": {
+          "bearerAuth": []
+        },
+        "summary": "Change the allowed fields of the house with given id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid update"
+          },
+          "403": {
+            "description": "Not allowed"
+          },
+          "404": {
+            "description": "House not found"
+          },
+          "500": {
+            "description": "Cannot find/server error"
+          }
+        },
+        "requestBody": {
+          "description": "House info",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/house"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["House"],
+        "security": {
+          "bearerAuth": []
+        },
+        "summary": "Delete the house with the given id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Not allowed"
+          },
+          "404": {
+            "description": "House not found"
+          },
+          "500": {
+            "description": "Cannot find/server error"
+          }
+        }
+      }
+    },
+    "/houses/{id}/assign": {
+      "post": {
+        "tags": ["House"],
+        "security": {
+          "bearerAuth": []
+        },
+        "summary": "Assign the tenant with given id to the house with given id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the house to assign tenant",
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "description": "Tenant id",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/tenantid"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
   },
   "definitions": {
+    "tenantid": {
+      "properties": {
+        "tenant": {
+          "type": "string"
+        }
+      }
+    },
     "id": {
       "properties": {
         "uuid": {
+          "type": "string"
+        }
+      }
+    },
+    "house": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
           "type": "string"
         }
       }
