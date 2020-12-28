@@ -1,6 +1,7 @@
 import express from 'express';
 import House from '../models/house';
 import auth from '../middleware/auth';
+import Tenant from '../models/tenant';
 const router = express.Router();
 
 // TODO add auth for all of them
@@ -9,11 +10,17 @@ router.post(
   '/houses',
   auth,
   async (req: express.Request, res: express.Response) => {
-    const house = new House({
-      ...req.body,
-      _owner: req.body.user._id,
-    });
     try {
+      const isLandlord = req.body.user.isLandlord;
+      if (!isLandlord) {
+        return res.status(403).send();
+      }
+
+      const house = new House({
+        ...req.body,
+        _owner: req.body.user._id,
+      });
+
       await house.save();
       res.status(201).send(house);
     } catch (e) {
