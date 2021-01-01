@@ -8,10 +8,10 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ProofService } from '../service/proof.service';
-import { ProofPutReq } from '../dto/proof-put';
+import { ProofPutReq } from '../dto/proof-put.dto';
 import { ProofApiPath } from '../constant/api-path';
 import { ApiTags } from '@nestjs/swagger';
-import { ProofPostReq } from '../dto/proof-post.dto';
+import { ProofPostReq, ProofPostRes } from '../dto/proof-post.dto';
 
 @ApiTags(ProofApiPath.root)
 @Controller(ProofApiPath.root)
@@ -19,7 +19,7 @@ export class ProofController {
   constructor(private readonly proofService: ProofService) {}
 
   @Post()
-  create(@Body() req: ProofPostReq) {
+  create(@Body() req: ProofPostReq): ProofPostRes {
     return this.proofService.create(req);
   }
 

@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { ProofPostReq } from '../dto/proof-post.dto';
-import { ProofPutReq } from '../dto/proof-put';
+import { ProofPostReq, ProofPostRes } from '../dto/proof-post.dto';
+import { ProofPutReq } from '../dto/proof-put.dto';
 
 @Injectable()
 export class ProofService {
-  create(req: ProofPostReq) {
-    return 'This action adds a new proof';
+  create(req: ProofPostReq): ProofPostRes {
+    return {
+      id: 'id',
+      name: 'qweqw',
+      title: 'qwe',
+      luckyNumber: 12,
+    };
   }
 
   findAll() {
