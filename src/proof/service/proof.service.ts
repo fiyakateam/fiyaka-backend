@@ -1,31 +1,34 @@
 import { Injectable } from '@nestjs/common';
+import { ProofGetRes } from '../dto/proof-get.dto';
 import { ProofPostReq, ProofPostRes } from '../dto/proof-post.dto';
-import { ProofPutReq } from '../dto/proof-put.dto';
+import { ProofPutReq, ProofPutRes } from '../dto/proof-put.dto';
 
 @Injectable()
 export class ProofService {
+  private static readonly placeholder = {
+    id: 'id',
+    name: 'qweqw',
+    title: 'qwe',
+    luckyNumber: 12,
+  };
+
   create(req: ProofPostReq): ProofPostRes {
-    return {
-      id: 'id',
-      name: 'qweqw',
-      title: 'qwe',
-      luckyNumber: 12,
-    };
+    return ProofService.placeholder;
   }
 
-  findAll() {
-    return `This action returns all proof`;
+  findAll(): Array<ProofGetRes> {
+    return [ProofService.placeholder, ProofService.placeholder];
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} proof`;
+  findOne(id: number): ProofGetRes {
+    return ProofService.placeholder;
   }
 
-  update(id: number, req: ProofPutReq) {
-    return `This action updates a #${id} proof`;
+  update(id: number, req: ProofPutReq): ProofPutRes {
+    return ProofService.placeholder;
   }
 
   remove(id: number) {
-    return `This action removes a #${id} proof`;
+    console.log(`remove ${id} proof`);
   }
 }
