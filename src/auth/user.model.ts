@@ -1,46 +1,22 @@
-import mongoose from 'mongoose';
-import validator from 'validator';
-import bcrypt from 'bcryptjs';
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Types } from 'mongoose';
 
-export interface IUser extends mongoose.Document {
+@Schema()
+export class User extends Document {
+  @Prop({ trim: true })
   name: string;
+
+  @Prop({ unique: true, trim: true })
   email: string;
+
+  @Prop({ trim: true })
   password: string;
+
+  @Prop({ default: true })
   timestamps: boolean;
+
+  @Prop()
   role: string;
-  toJSON(): any;
 }
 
-export const userSchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true },
-  email: {
-    type: String,
-    unique: true,
-    trim: true,
-    lowercase: true,
-    validate(value: string) {
-      if (!validator.isEmail(value)) throw new Error('Email is invalid!');
-    },
-  },
-  password: { type: String, required: true, trim: true, minlength: 8 },
-  isLandlord: { type: Boolean, required: true },
-  timestamps: { type: Boolean, default: true },
-});
-
-userSchema.methods.toJSON = function () {
-  const userObject = this.toObject();
-
-  delete userObject.password;
-  delete userObject.tokens;
-
-  return userObject;
-};
-
-userSchema.pre<IUser>('save', async function (next) {
-  if (this.isModified('password')) {
-    this.password = await bcrypt.hash(this.password, 8);
-  }
-  next(null);
-});
-
-export default userSchema;
+export const UserSchema = SchemaFactory.createForClass(User);
