@@ -1,21 +1,25 @@
-import mongoose, { Model, Schema } from 'mongoose';
-import { userSchema, IUser } from '../auth/user.model';
-import { ILandlord } from '../landlord/landlord.model';
-import bcrypt from 'bcryptjs';
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Types } from 'mongoose';
 
-export interface ITenant extends IUser {
-  _landlord: ILandlord['_id'];
+@Schema()
+export class Tenant extends Document {
+  @Prop({ trim: true })
+  name: string;
+
+  @Prop({ unique: true, trim: true })
+  email: string;
+
+  @Prop({ trim: true })
+  password: string;
+
+  @Prop({ default: true })
+  timestamps: boolean;
+
+  @Prop({ type: Types.ObjectId, ref: 'Landlord' })
+  _landlord: string;
+
+  @Prop({ type: Types.ObjectId, ref: 'House' })
+  _house: string;
 }
 
-export interface ITenantModel extends Model<ITenant> {
-  findByCredentials(email: string, password: string): Promise<ITenant>;
-}
-
-const tenantSchema: Schema = new mongoose.Schema({
-  _landlord: { type: Schema.Types.ObjectId, ref: 'Landlord', required: true },
-});
-
-tenantSchema.add(userSchema).add({ role: { type: String, default: 'Tenant' } });
-
-const Tenant = mongoose.model<ITenant, ITenantModel>('Tenant', tenantSchema);
-export default Tenant;
+export const TenantSchema = SchemaFactory.createForClass(Tenant);
