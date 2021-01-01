@@ -23,4 +23,8 @@ export class AuthService {
   remove(id: number) {
     return `This action removes a #${id} auth`;
   }
+
+  findByCredentials(email: string, password: string) {
+    return 'This function will find the user with given credentials';
+  }
 }

@@ -28,25 +28,6 @@ landlordSchema.virtual('tenants', {
   foreignField: '_landlord',
 });
 
-landlordSchema.statics.findByCredentials = async (
-  email: string,
-  password: string
-) => {
-  const user = await Landlord.findOne({ email });
-
-  if (!user) {
-    throw new Error('Unable to login');
-  }
-
-  const isMatch = await bcrypt.compare(password, user.password);
-
-  if (!isMatch) {
-    throw new Error('Unable to login');
-  }
-
-  return user;
-};
-
 const Landlord = mongoose.model<ILandlord, ILandlordModel>(
   'Landlord',
   landlordSchema
