@@ -11,7 +11,7 @@ async function bootstrap() {
     .setTitle('Fiyaka API')
     .setDescription('Fiyaka API Routes')
     .setVersion('1.0')
-    .addTag('cats')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
