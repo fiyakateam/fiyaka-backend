@@ -5,25 +5,9 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
+import { CreateUserDto } from 'src/auth/dto/create-user.dto';
 
-export class CreateTenantDto {
-  @IsString()
-  @IsNotEmpty()
-  readonly name: string;
-
-  @IsString()
-  @IsEmail()
-  @IsNotEmpty()
-  readonly email: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(8)
-  readonly password: string;
-
-  @IsBoolean()
-  readonly timestamps: boolean;
-
+export class CreateTenantDto extends CreateUserDto {
   @IsNotEmpty()
   @IsString()
   readonly _landlord: string;
