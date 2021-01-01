@@ -10,7 +10,9 @@ import {
 import { LandlordService } from './landlord.service';
 import { CreateLandlordDto } from './dto/create-landlord.dto';
 import { UpdateLandlordDto } from './dto/update-landlord.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('landlord')
 @Controller('landlord')
 export class LandlordController {
   constructor(private readonly landlordService: LandlordService) {}
