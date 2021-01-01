@@ -1,20 +1,9 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { User } from 'src/auth/user.model';
 
 @Schema()
-export class Tenant extends Document {
-  @Prop({ trim: true })
-  name: string;
-
-  @Prop({ unique: true, trim: true })
-  email: string;
-
-  @Prop({ trim: true })
-  password: string;
-
-  @Prop({ default: true })
-  timestamps: boolean;
-
+export class Tenant extends User {
   @Prop({ type: Types.ObjectId, ref: 'Landlord' })
   _landlord: string;
 
