@@ -10,7 +10,9 @@ import {
 import { HouseService } from './house.service';
 import { CreateHouseDto } from './dto/create-house.dto';
 import { UpdateHouseDto } from './dto/update-house.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('house')
 @Controller('house')
 export class HouseController {
   constructor(private readonly houseService: HouseService) {}
