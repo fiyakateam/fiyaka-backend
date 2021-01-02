@@ -1,6 +1,8 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
-import { User } from 'src/auth/model/user.model';
+import { Types } from 'mongoose';
+import { IUser, User } from 'src/auth/model/user.model';
+import { IHouse } from 'src/house/model/house.model';
+import { ILandlord } from 'src/landlord/model/landlord.model';
 
 @Schema()
 export class Tenant extends User {
@@ -9,6 +11,14 @@ export class Tenant extends User {
 
   @Prop({ type: Types.ObjectId, ref: 'House' })
   _house: string;
+
+  @Prop()
+  description: string;
+}
+
+export interface ITenant extends IUser {
+  _landlord: ILandlord['id'];
+  _house: IHouse['id'];
 }
 
 export const TenantSchema = SchemaFactory.createForClass(Tenant);

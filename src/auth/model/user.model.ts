@@ -1,5 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document } from 'mongoose';
 
 @Schema()
 export class User extends Document {
@@ -16,6 +16,14 @@ export class User extends Document {
   timestamps: boolean;
 
   @Prop()
+  role: string;
+}
+
+export interface IUser extends Document {
+  name: string;
+  email: string;
+  password: string;
+  timestamps: boolean;
   role: string;
 }
 
