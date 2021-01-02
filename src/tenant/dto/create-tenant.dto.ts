@@ -1,17 +1,12 @@
-import {
-  IsBoolean,
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  MinLength,
-} from 'class-validator';
-import { CreateUserDto } from 'src/auth/dto/create-user.dto';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateTenantDto extends CreateUserDto {
+export class CreateTenantDto {
+  @IsString()
   @IsNotEmpty()
-  @IsString()
-  readonly _landlord: string;
+  readonly name: string;
 
   @IsString()
-  readonly _house: string;
+  @IsEmail()
+  @IsNotEmpty()
+  readonly email: string;
 }

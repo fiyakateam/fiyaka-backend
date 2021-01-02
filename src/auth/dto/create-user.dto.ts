@@ -20,10 +20,4 @@ export class CreateUserDto {
   @IsNotEmpty()
   @MinLength(8)
   readonly password: string;
-
-  @IsBoolean()
-  readonly timestamps: boolean;
-
-  @IsString()
-  readonly role: string;
 }
