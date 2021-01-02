@@ -8,13 +8,13 @@ import { ILandlord, Landlord } from '../model/landlord.model';
 @Injectable()
 export class LandlordService {
   constructor(
-    @InjectModel('Landlord') private readonly landlordModel: Model<Landlord>
+    @InjectModel(Landlord.name) private readonly landlordModel: Model<Landlord>
   ) {}
 
   public async create(
     createLandlordDto: CreateLandlordDto
   ): Promise<ILandlord> {
-    const newLandlord = await new this.landlordModel(createLandlordDto);
+    const newLandlord = new this.landlordModel(createLandlordDto);
     return newLandlord.save();
   }
 
@@ -27,6 +27,14 @@ export class LandlordService {
 
     if (!landlord) {
       throw new NotFoundException(`Landlord #${id} not found`);
+    }
+    return landlord;
+  }
+
+  async findOneEmail(email: string): Promise<Landlord> {
+    const landlord = await this.landlordModel.findOne({ email });
+    if (!landlord) {
+      throw new NotFoundException('Email or password is wrong');
     }
     return landlord;
   }
