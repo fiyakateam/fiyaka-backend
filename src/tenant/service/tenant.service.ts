@@ -18,8 +18,13 @@ export class TenantService {
     return `This action returns all tenant`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tenant`;
+  async findOne(id: number): Promise<Tenant> {
+    const tenant = await this.tenantModel.findById({ _id: id });
+
+    if (!tenant) {
+      throw new NotFoundException(`Tenant #${id} not found`);
+    }
+    return tenant;
   }
 
   async findOneEmail(email: string): Promise<Tenant> {
