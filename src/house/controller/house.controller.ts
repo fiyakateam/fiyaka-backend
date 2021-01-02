@@ -6,6 +6,7 @@ import {
   Put,
   Param,
   Delete,
+  Res,
 } from '@nestjs/common';
 import { HouseService } from '../service/house.service';
 import { CreateHouseDto } from '../dto/create-house.dto';
@@ -18,8 +19,13 @@ export class HouseController {
   constructor(private readonly houseService: HouseService) {}
 
   @Post()
-  create(@Body() createHouseDto: CreateHouseDto) {
-    return this.houseService.create(createHouseDto);
+  public async create(@Res() res, @Body() createHouseDto: CreateHouseDto) {
+    try {
+      const house = await this.houseService.create(createHouseDto);
+      return res.status(201).send(house);
+    } catch (e) {
+      return res.status(400).send(e);
+    }
   }
 
   @Get()
@@ -29,7 +35,7 @@ export class HouseController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.houseService.findOne(+id);
+    return this.houseService.findOne(id);
   }
 
   @Put(':id')

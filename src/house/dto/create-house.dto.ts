@@ -9,12 +9,6 @@ export class CreateHouseDto {
   @IsNotEmpty()
   readonly address: string;
 
-  readonly currentRentalContract: Buffer;
-
   @IsString()
-  readonly _occupant: string;
-
-  @IsString()
-  @IsNotEmpty()
   readonly _owner: string;
 }
