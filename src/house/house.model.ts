@@ -1,22 +1,22 @@
-import mongoose, { Schema } from 'mongoose';
-import { ILandlord } from '../landlord/landlord.model';
-import { ITenant } from '../tenant/tenant.model';
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Types } from 'mongoose';
 
-export interface IHouse extends mongoose.Document {
+@Schema()
+export class House extends Document {
+  @Prop({ trim: true })
   name: string;
+
+  @Prop()
   address: string;
+
+  @Prop({ type: Buffer })
   currentRentalContract: Buffer;
-  _owner: ILandlord['_id'];
-  _occupant: ITenant['_id'];
+
+  @Prop({ type: Types.ObjectId, ref: 'Tenant' })
+  _occupant: string;
+
+  @Prop({ type: Types.ObjectId, ref: 'Landlord' })
+  _owner: string;
 }
 
-export const HouseSchema: Schema = new mongoose.Schema({
-  name: { type: String, required: true },
-  address: { type: String, required: true },
-  currentRentalContract: { type: Buffer },
-  _owner: { type: Schema.Types.ObjectId, ref: 'Landlord', required: true },
-  _occupant: { type: Schema.Types.ObjectId, ref: 'Tenant' },
-});
-
-const House = mongoose.model<IHouse>('House', HouseSchema);
-export default House;
+export const HouseSchema = SchemaFactory.createForClass(House);
