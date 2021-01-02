@@ -3,13 +3,13 @@ import { Document } from 'mongoose';
 
 @Schema()
 export class User extends Document {
-  @Prop({ trim: true })
+  @Prop({ require: true, trim: true })
   name: string;
 
-  @Prop({ unique: true, trim: true })
+  @Prop({ require: true, unique: true, trim: true })
   email: string;
 
-  @Prop({ trim: true })
+  @Prop({ require: true, trim: true })
   password: string;
 
   @Prop({ default: true })
@@ -23,4 +23,22 @@ export interface IUser extends Document {
   timestamps: boolean;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.methods.toJSON = function () {
+  const userObject = this.toObject();
+
+  delete userObject.password;
+  delete userObject.tokens;
+
+  return userObject;
+};
+
+/*UserSchema.pre<IUser>('save', async function (next) {
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 8);
+  }
+  next(null);
+});*/
+
+export { UserSchema };

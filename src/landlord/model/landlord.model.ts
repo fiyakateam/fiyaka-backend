@@ -18,4 +18,18 @@ export interface ILandlord extends IUser {
   role: string;
 }
 
-export const LandlordSchema = SchemaFactory.createForClass(Landlord);
+const LandlordSchema = SchemaFactory.createForClass(Landlord);
+
+LandlordSchema.virtual('houses', {
+  ref: 'House',
+  localField: '_id',
+  foreignField: '_owner',
+});
+
+LandlordSchema.virtual('tenants', {
+  ref: 'Tenant',
+  localField: '_id',
+  foreignField: '_landlord',
+});
+
+export { LandlordSchema };
