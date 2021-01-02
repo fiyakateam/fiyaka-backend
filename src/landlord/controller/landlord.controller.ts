@@ -6,6 +6,8 @@ import {
   Put,
   Param,
   Delete,
+  Res,
+  NotFoundException,
 } from '@nestjs/common';
 import { LandlordService } from '../service/landlord.service';
 import { CreateLandlordDto } from '../dto/create-landlord.dto';
@@ -17,9 +19,17 @@ import { ApiTags } from '@nestjs/swagger';
 export class LandlordController {
   constructor(private readonly landlordService: LandlordService) {}
 
-  @Post()
-  create(@Body() createLandlordDto: CreateLandlordDto) {
-    return this.landlordService.create(createLandlordDto);
+  @Post('register')
+  public async create(
+    @Res() res,
+    @Body() createLandlordDto: CreateLandlordDto
+  ) {
+    try {
+      const landlord = await this.landlordService.create(createLandlordDto);
+      return res.status(201).send(landlord);
+    } catch (e) {
+      return res.status(400).send(e);
+    }
   }
 
   @Get()
@@ -28,8 +38,12 @@ export class LandlordController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.landlordService.findOne(+id);
+  public async findOne(@Res() res, @Param('id') id: string) {
+    const landlord = await this.landlordService.findOne(id);
+    if (!landlord) {
+      throw new NotFoundException();
+    }
+    return res.status(200).send(landlord);
   }
 
   @Put(':id')
@@ -37,11 +51,17 @@ export class LandlordController {
     @Param('id') id: string,
     @Body() updateLandlordDto: UpdateLandlordDto
   ) {
-    return this.landlordService.update(+id, updateLandlordDto);
+    return this.landlordService.update(id, updateLandlordDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.landlordService.remove(+id);
+  public async remove(@Res() res, @Param('id') id: string) {
+    const landlord = await this.landlordService.remove(id);
+
+    if (!landlord) {
+      throw new NotFoundException();
+    }
+
+    return res.status(200).send(landlord);
   }
 }
