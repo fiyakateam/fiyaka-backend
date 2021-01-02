@@ -10,9 +10,12 @@ import {
 import { HouseService } from '../service/house.service';
 import { CreateHouseDto } from '../dto/create-house.dto';
 import { UpdateHouseDto } from '../dto/update-house.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Landlord } from 'src/landlord/model/landlord.model';
+import { Tenant } from 'src/tenant/model/tenant.model';
 
 @ApiTags('house')
+@ApiBearerAuth()
 @Controller('house')
 export class HouseController {
   constructor(private readonly houseService: HouseService) {}
@@ -23,7 +26,8 @@ export class HouseController {
   }
 
   @Get()
-  findAll() {
+  findAll(@Body() user: Landlord | Tenant) {
+    console.log(user);
     return this.houseService.findAll();
   }
 
