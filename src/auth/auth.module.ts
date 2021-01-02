@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
+import { AuthService } from './service/auth.service';
+import { AuthController } from './controller/auth.controller';
 import { LandlordModule } from 'src/landlord/landlord.module';
 import { TenantModule } from 'src/tenant/tenant.module';
 

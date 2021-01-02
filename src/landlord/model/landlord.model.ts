@@ -1,6 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { User } from 'src/auth/user.model';
+import { User } from 'src/auth/model/user.model';
 
 @Schema()
 export class Landlord extends User {

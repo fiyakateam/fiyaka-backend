@@ -7,9 +7,9 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { LandlordService } from './landlord.service';
-import { CreateLandlordDto } from './dto/create-landlord.dto';
-import { UpdateLandlordDto } from './dto/update-landlord.dto';
+import { LandlordService } from '../service/landlord.service';
+import { CreateLandlordDto } from '../dto/create-landlord.dto';
+import { UpdateLandlordDto } from '../dto/update-landlord.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('landlord')

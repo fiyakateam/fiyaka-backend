@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLandlordDto } from './dto/create-landlord.dto';
-import { UpdateLandlordDto } from './dto/update-landlord.dto';
+import { CreateLandlordDto } from '../dto/create-landlord.dto';
+import { UpdateLandlordDto } from '../dto/update-landlord.dto';
 
 @Injectable()
 export class LandlordService {

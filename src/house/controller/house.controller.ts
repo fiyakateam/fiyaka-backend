@@ -7,9 +7,9 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { HouseService } from './house.service';
-import { CreateHouseDto } from './dto/create-house.dto';
-import { UpdateHouseDto } from './dto/update-house.dto';
+import { HouseService } from '../service/house.service';
+import { CreateHouseDto } from '../dto/create-house.dto';
+import { UpdateHouseDto } from '../dto/update-house.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('house')
