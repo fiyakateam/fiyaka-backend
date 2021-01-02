@@ -9,8 +9,13 @@ export class Landlord extends User {
 
   @Prop({ type: [Types.ObjectId], ref: 'House' })
   _houses: string;
+
+  @Prop({ default: 'landlord' })
+  role: string;
 }
 
-export type ILandlord = IUser;
+export interface ILandlord extends IUser {
+  role: string;
+}
 
 export const LandlordSchema = SchemaFactory.createForClass(Landlord);

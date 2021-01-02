@@ -14,9 +14,6 @@ export class User extends Document {
 
   @Prop({ default: true })
   timestamps: boolean;
-
-  @Prop()
-  role: string;
 }
 
 export interface IUser extends Document {
@@ -24,7 +21,6 @@ export interface IUser extends Document {
   email: string;
   password: string;
   timestamps: boolean;
-  role: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

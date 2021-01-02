@@ -14,11 +14,16 @@ export class Tenant extends User {
 
   @Prop()
   description: string;
+
+  @Prop({ default: 'tenant' })
+  role: string;
 }
 
 export interface ITenant extends IUser {
   _landlord: ILandlord['id'];
   _house: IHouse['id'];
+  description: string;
+  role: string;
 }
 
 export const TenantSchema = SchemaFactory.createForClass(Tenant);
