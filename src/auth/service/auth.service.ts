@@ -32,6 +32,11 @@ export class AuthService {
     return token;
   }
 
+  verifyToken(token: string): any {
+    const decoded = this.jwtService.verify(token);
+    return decoded;
+  }
+
   async findByCredentials(credentials: AuthPostReq): Promise<AuthPostRes> {
     const user =
       (await this.landlordService.findOneEmail(credentials.email)) ||

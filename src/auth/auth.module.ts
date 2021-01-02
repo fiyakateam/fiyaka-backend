@@ -16,5 +16,6 @@ import env from 'config/env';
       signOptions: { expiresIn: '1y' },
     }),
   ],
+  exports: [AuthService],
 })
 export class AuthModule {}
