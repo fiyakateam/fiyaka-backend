@@ -14,7 +14,7 @@ export class LandlordService {
   public async create(
     createLandlordDto: CreateLandlordDto
   ): Promise<ILandlord> {
-    const newLandlord = await new this.landlordModel(createLandlordDto);
+    const newLandlord = new this.landlordModel(createLandlordDto);
     return newLandlord.save();
   }
 
