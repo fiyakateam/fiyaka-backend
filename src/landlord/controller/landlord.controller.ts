@@ -19,7 +19,7 @@ import { ApiTags } from '@nestjs/swagger';
 export class LandlordController {
   constructor(private readonly landlordService: LandlordService) {}
 
-  @Post('register')
+  /*@Post('register')
   public async create(
     @Res() res,
     @Body() createLandlordDto: CreateLandlordDto
@@ -30,7 +30,7 @@ export class LandlordController {
     } catch (e) {
       return res.status(400).send(e);
     }
-  }
+  }*/
 
   @Get()
   findAll() {
