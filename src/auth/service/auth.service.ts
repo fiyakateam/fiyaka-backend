@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Dependencies,
   Inject,
   Injectable,
@@ -21,6 +22,9 @@ export class AuthService {
   ) {}
 
   async register(info: CreateLandlordDto): Promise<AuthPostRes> {
+    if (await this.landlordService.findOneEmail(info.email)) {
+      throw new BadRequestException('Email is already in use');
+    }
     const password = await bcrypt.hash(info.password, 8);
     const landlord = await this.landlordService.create({ ...info, password });
     const token = this.generateAuthToken(landlord._id, landlord.role);
@@ -44,6 +48,9 @@ export class AuthService {
     const user =
       (await this.landlordService.findOneEmail(credentials.email)) ||
       (await this.tenantService.findOneEmail(credentials.email));
+    if (!user) {
+      throw new NotFoundException('Email or password is wrong');
+    }
     const isMatch = await bcrypt.compare(credentials.password, user.password);
     if (!isMatch) {
       throw new NotFoundException('Email or password is wrong.');

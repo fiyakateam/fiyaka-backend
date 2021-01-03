@@ -33,9 +33,6 @@ export class LandlordService {
 
   async findOneEmail(email: string): Promise<Landlord> {
     const landlord = await this.landlordModel.findOne({ email });
-    if (!landlord) {
-      throw new NotFoundException('Email or password is wrong');
-    }
     return landlord;
   }
 
