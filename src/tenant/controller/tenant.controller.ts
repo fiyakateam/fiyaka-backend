@@ -6,39 +6,56 @@ import {
   Put,
   Param,
   Delete,
+  Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { TenantService } from '../service/tenant.service';
-import { CreateTenantDto } from '../dto/create-tenant.dto';
+import { CreateTenantReq, CreateTenantRes } from '../dto/tenant-post.dto';
 import { UpdateTenantDto } from '../dto/update-tenant.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Landlord } from 'src/landlord/model/landlord.model';
+import { Tenant } from '../model/tenant.model';
 
 @ApiTags('tenant')
+@ApiBearerAuth()
 @Controller('tenant')
 export class TenantController {
   constructor(private readonly tenantService: TenantService) {}
 
   @Post()
-  create(@Body() createTenantDto: CreateTenantDto) {
-    return this.tenantService.create(createTenantDto);
+  async create(
+    @Req() req: any,
+    @Body() createTenantReq: CreateTenantReq
+  ): Promise<CreateTenantRes> {
+    if (req.user.role != 'landlord') {
+      throw new UnauthorizedException();
+    }
+    return await this.tenantService.create(req.user._id, createTenantReq);
   }
 
   @Get()
-  findAll() {
-    return this.tenantService.findAll();
+  async findAll(@Req() req) {
+    if (req.user.role != 'landlord') {
+      throw new UnauthorizedException();
+    }
+    return await this.tenantService.findAll(req.user._id);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tenantService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.tenantService.findOne(id);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateTenantDto: UpdateTenantDto) {
-    return this.tenantService.update(+id, updateTenantDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateTenantDto: UpdateTenantDto
+  ) {
+    return await this.tenantService.update(id, updateTenantDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tenantService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.tenantService.remove(id);
   }
 }
