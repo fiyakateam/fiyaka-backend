@@ -5,10 +5,10 @@ import { IUser, User } from 'src/auth/model/user.model';
 @Schema()
 export class Landlord extends User {
   @Prop({ type: [Types.ObjectId], ref: 'Tenant' })
-  _tenants: string;
+  tenants: string;
 
   @Prop({ type: [Types.ObjectId], ref: 'House' })
-  _houses: string;
+  houses: string;
 
   @Prop({ default: 'landlord' })
   role: string;
@@ -19,17 +19,5 @@ export interface ILandlord extends IUser {
 }
 
 const LandlordSchema = SchemaFactory.createForClass(Landlord);
-
-LandlordSchema.virtual('houses', {
-  ref: 'House',
-  localField: '_id',
-  foreignField: '_owner',
-});
-
-LandlordSchema.virtual('tenants', {
-  ref: 'Tenant',
-  localField: '_id',
-  foreignField: '_landlord',
-});
 
 export { LandlordSchema };

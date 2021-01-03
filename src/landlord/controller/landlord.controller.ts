@@ -14,7 +14,6 @@ import { EmailReq } from '../dto/email.dto';
 @Controller('landlord')
 export class LandlordController {
   constructor(private readonly landlordService: LandlordService) {}
-
   @Post('email')
   async email(@Body() email: EmailReq): Promise<void> {
     if (!(await this.landlordService.sendEmail(email))) {
