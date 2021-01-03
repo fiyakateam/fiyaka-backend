@@ -18,8 +18,7 @@ export class AuthMiddleware implements NestMiddleware {
   async use(req: any, res: any, next: () => void) {
     const token = req.header('Authorization')?.replace('Bearer ', '') as string;
     const decoded = this.authService.verifyToken(token);
-
-    if (!decoded.role) {
+    if (!decoded || !decoded.role) {
       throw new UnauthorizedException();
     }
 
