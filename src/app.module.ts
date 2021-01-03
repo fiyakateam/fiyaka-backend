@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { HouseModule } from './house/house.module';
 import { TenantModule } from './tenant/tenant.module';
@@ -24,7 +24,7 @@ import { TenantController } from './tenant/controller/tenant.controller';
   controllers: [AppController],
   providers: [],
 })
-export class AppModule {
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
