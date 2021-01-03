@@ -33,6 +33,9 @@ export class AuthService {
   }
 
   verifyToken(token: string): any {
+    if (!token) {
+      return null;
+    }
     const decoded = this.jwtService.verify(token);
     return decoded;
   }
