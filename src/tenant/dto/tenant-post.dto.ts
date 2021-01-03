@@ -1,6 +1,7 @@
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { TenantEntity } from './tenantentity.dto';
 
-export class CreateTenantDto {
+export class CreateTenantReq {
   @IsString()
   @IsNotEmpty()
   readonly name: string;
@@ -9,4 +10,9 @@ export class CreateTenantDto {
   @IsEmail()
   @IsNotEmpty()
   readonly email: string;
+}
+
+export class CreateTenantRes {
+  tenant: TenantEntity;
+  password: string;
 }
