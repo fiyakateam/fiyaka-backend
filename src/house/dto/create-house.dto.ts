@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateHouseDto {
   @IsString()
@@ -9,6 +9,6 @@ export class CreateHouseDto {
   @IsNotEmpty()
   readonly address: string;
 
-  @IsString()
-  readonly _owner: string;
+  @IsOptional()
+  _occupant: string;
 }
