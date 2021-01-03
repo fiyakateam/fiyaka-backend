@@ -27,7 +27,7 @@ export class AuthMiddleware implements NestMiddleware {
         decoded.role === 'landlord'
           ? await this.landlordService.findOne(decoded._id)
           : await this.tenantService.findOne(decoded._id);
-      req.body.user = user;
+      req.user = user;
     } catch (e) {
       throw new UnauthorizedException();
     }
