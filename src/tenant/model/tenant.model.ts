@@ -20,8 +20,8 @@ export class Tenant extends User {
 }
 
 export interface ITenant extends IUser {
-  _landlord: ILandlord['id'];
-  _house: IHouse['id'];
+  _landlord: ILandlord['_id'];
+  _house: IHouse['_id'];
   description: string;
   role: string;
 }
