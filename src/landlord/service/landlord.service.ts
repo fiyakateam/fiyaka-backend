@@ -1,10 +1,12 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateLandlordDto } from '../dto/create-landlord.dto';
 import { UpdateLandlordDto } from '../dto/update-landlord.dto';
 import { ILandlord, Landlord } from '../model/landlord.model';
-
+import * as sgMail from '@sendgrid/mail';
+import { EmailReq } from '../dto/email.dto';
+import env from 'config/env';
 @Injectable()
 export class LandlordService {
   constructor(
@@ -16,10 +18,6 @@ export class LandlordService {
   ): Promise<ILandlord> {
     const newLandlord = new this.landlordModel(createLandlordDto);
     return newLandlord.save();
-  }
-
-  findAll() {
-    return `This action returns all landlord`;
   }
 
   public async findOne(id: string): Promise<Landlord> {
@@ -43,5 +41,20 @@ export class LandlordService {
   public async remove(id: string) {
     const deletedLandlord = await this.landlordModel.findByIdAndRemove(id);
     return deletedLandlord;
+  }
+
+  async sendEmail(email: EmailReq): Promise<boolean> {
+    try {
+      await sgMail.send({
+        to: email.to,
+        from: env.emailSource,
+        subject: email.subject,
+        text: email.text,
+      });
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   }
 }

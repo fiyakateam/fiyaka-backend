@@ -8,6 +8,7 @@ import {
   Delete,
   Req,
   UnauthorizedException,
+  NotFoundException,
 } from '@nestjs/common';
 import { TenantService } from '../service/tenant.service';
 import { CreateTenantReq, CreateTenantRes } from '../dto/tenant-post.dto';
@@ -15,6 +16,7 @@ import { UpdateTenantDto } from '../dto/update-tenant.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Landlord } from 'src/landlord/model/landlord.model';
 import { Tenant } from '../model/tenant.model';
+import { TenantEntity } from '../dto/tenantentity.dto';
 
 @ApiTags('tenant')
 @ApiBearerAuth()
@@ -42,7 +44,7 @@ export class TenantController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<TenantEntity> {
     return await this.tenantService.findOne(id);
   }
 
@@ -50,12 +52,18 @@ export class TenantController {
   async update(
     @Param('id') id: string,
     @Body() updateTenantDto: UpdateTenantDto
-  ) {
+  ): Promise<TenantEntity> {
     return await this.tenantService.update(id, updateTenantDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return await this.tenantService.remove(id);
+  async remove(@Req() req: any, @Param('id') id: string): Promise<void> {
+    if (req.user.role != 'landlord') {
+      throw new UnauthorizedException('Not authorized for this action.');
+    }
+    const deleted = await this.tenantService.remove(id);
+    if (!deleted) {
+      throw new NotFoundException('Tenant does not exist');
+    }
   }
 }
