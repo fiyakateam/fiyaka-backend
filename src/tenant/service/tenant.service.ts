@@ -19,6 +19,10 @@ export class TenantService {
     landlordid: string,
     createTenantDto: CreateTenantReq
   ): Promise<CreateTenantRes> {
+    if (await this.findOneEmail(createTenantDto.email)) {
+      throw new BadRequestException('This email is already in use');
+    }
+
     const password = Math.random().toString(16).substr(2, 8);
     const hashed = await hash(password, 8);
     const tenant = new this.tenantModel({
