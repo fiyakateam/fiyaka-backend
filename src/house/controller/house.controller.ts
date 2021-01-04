@@ -19,6 +19,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Tenant } from 'src/tenant/model/tenant.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { HouseEntity } from '../dto/houseentity.dto';
 
 @ApiTags('house')
 @ApiBearerAuth()
@@ -55,7 +56,10 @@ export class HouseController {
   }
 
   @Get(':id')
-  public async findOne(@Param('id') id: string, @Req() req) {
+  public async findOne(
+    @Param('id') id: string,
+    @Req() req
+  ): Promise<HouseEntity> {
     const house = await this.houseService.findOne(
       id,
       req.user._id,
