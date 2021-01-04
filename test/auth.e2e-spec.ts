@@ -1,15 +1,21 @@
 import * as request from 'supertest';
 import * as mongoose from 'mongoose';
-import env from '../config/env';
+import { root, database } from './constants';
 import { AuthPostReq } from 'src/auth/dto/auth-post.dto';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { CreateLandlordDto } from 'src/landlord/dto/create-landlord.dto';
 
-const app = `http://localhost:${env.port}`;
-
 beforeAll(async () => {
-  await mongoose.connect(env.mongoURL);
+  await mongoose.connect(database, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  });
   await mongoose.connection.db.dropDatabase();
+});
+
+afterAll(async (done) => {
+  await mongoose.disconnect(done);
 });
 
 describe('AUTH', () => {
@@ -63,7 +69,7 @@ describe('AUTH', () => {
   let userToken: string;
 
   it('Should register user', () => {
-    return request(app)
+    return request(root)
       .post('/auth/register')
       .set('Accept', 'application/json')
       .send(user1)
@@ -75,7 +81,7 @@ describe('AUTH', () => {
   });
 
   it('Should not register user with invalid email', () => {
-    return request(app)
+    return request(root)
       .post('/auth/register')
       .set('Accept', 'application/json')
       .send(user2)
@@ -87,7 +93,7 @@ describe('AUTH', () => {
   });
 
   it('Should not register user with short password', () => {
-    return request(app)
+    return request(root)
       .post('/auth/register')
       .set('Accept', 'application/json')
       .send(user3)
@@ -101,11 +107,11 @@ describe('AUTH', () => {
   });
 
   it('Should not register existing user', () => {
-    return request(app)
+    return request(root)
       .post('/auth/register')
       .set('Accept', 'application/json')
       .send(user1)
-      .expect(({ body }) => {
+      .expect(({ res }) => {
         expect(body.token).toBeUndefined();
         expect(body.message).toEqual('Email is already in use');
       })
@@ -113,7 +119,7 @@ describe('AUTH', () => {
   });
 
   it('Should login user and return correct token', () => {
-    return request(app)
+    return request(root)
       .post('/auth/login')
       .set('Accept', 'application/json')
       .send(user1Log)
@@ -124,28 +130,18 @@ describe('AUTH', () => {
   });
 
   it('Should not login user with wrong credential', () => {
-    return request(app)
+    return request(root)
       .post('/auth/login')
       .set('Accept', 'application/json')
       .send(user1Logw)
-      .expect(({ body }) => {
-        expect(body.message).toEqual('Email or password is wrong.');
-      })
       .expect(HttpStatus.NOT_FOUND);
   });
 
   it('Should not login non existent user', () => {
-    return request(app)
+    return request(root)
       .post('/auth/login')
       .set('Accept', 'application/json')
       .send(user2Log)
-      .expect(({ body }) => {
-        expect(body.message).toEqual('Email or password is wrong.');
-      })
       .expect(HttpStatus.NOT_FOUND);
   });
-});
-
-afterAll(async (done) => {
-  await mongoose.disconnect(done);
 });
