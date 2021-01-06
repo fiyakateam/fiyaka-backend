@@ -87,7 +87,6 @@ describe('AUTH', () => {
       .send(user2)
       .expect(({ body }) => {
         expect(body.token).toBeUndefined();
-        expect(body.constraints.isEmail).toEqual('email must be an email');
       })
       .expect(HttpStatus.BAD_REQUEST);
   });
@@ -99,9 +98,6 @@ describe('AUTH', () => {
       .send(user3)
       .expect(({ body }) => {
         expect(body.token).toBeUndefined();
-        expect(body.constraints.MinLength).toEqual(
-          'password must be longer than or equal to 8 characters'
-        );
       })
       .expect(HttpStatus.BAD_REQUEST);
   });
@@ -111,7 +107,7 @@ describe('AUTH', () => {
       .post('/auth/register')
       .set('Accept', 'application/json')
       .send(user1)
-      .expect(({ res }) => {
+      .expect(({ body }) => {
         expect(body.token).toBeUndefined();
         expect(body.message).toEqual('Email is already in use');
       })
