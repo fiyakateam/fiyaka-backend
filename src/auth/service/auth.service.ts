@@ -5,13 +5,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { LandlordService } from 'src/landlord/service/landlord.service';
-import { TenantService } from 'src/tenant/service/tenant.service';
-import { AuthPostReq, AuthPostRes } from '../dto/auth-post.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { CreateLandlordDto } from 'src/landlord/dto/create-landlord.dto';
-
+import { CreateLandlordDto } from '../../landlord/dto/create-landlord.dto';
+import { LandlordService } from '../../landlord/service/landlord.service';
+import { TenantService } from '../../tenant/service/tenant.service';
+import { AuthPostReq, AuthPostRes } from '../dto/auth-post.dto';
 @Injectable()
 @Dependencies(LandlordService, TenantService, JwtService)
 export class AuthService {

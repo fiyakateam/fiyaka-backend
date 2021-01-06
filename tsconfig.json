@@ -10,10 +10,6 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true,
-    "paths": {
-      "@app/hello": ["libs/hello/src"],
-      "@app/hello/*": ["libs/hello/src/*"]
-    }
+    "incremental": true
   }
 }

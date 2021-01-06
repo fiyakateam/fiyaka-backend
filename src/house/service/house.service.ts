@@ -1,10 +1,9 @@
 import { Dependencies, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { LandlordService } from 'src/landlord/service/landlord.service';
-import { TenantEntity } from 'src/tenant/dto/tenantentity.dto';
-import { Tenant } from 'src/tenant/model/tenant.model';
-import { TenantService } from 'src/tenant/service/tenant.service';
+import { LandlordService } from '../../landlord/service/landlord.service';
+import { Tenant } from '../../tenant/model/tenant.model';
+import { TenantService } from '../../tenant/service/tenant.service';
 import { CreateHouseDto } from '../dto/create-house.dto';
 import { HouseEntity } from '../dto/houseentity.dto';
 import { UpdateHouseDto } from '../dto/update-house.dto';
@@ -92,11 +91,12 @@ export class HouseService {
   }
 
   private async sanitize(house: House): Promise<HouseEntity> {
+    const occupant = await this.findOne({ _id: house._occupant });
     return {
       _id: house._id,
       name: house.name,
       address: house.address,
-      occupant: await this.tenantModel.findOne({ _id: house._occupant }),
+      occupant,
     };
   }
 }

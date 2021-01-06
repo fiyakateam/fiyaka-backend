@@ -6,7 +6,7 @@ import { UpdateLandlordDto } from '../dto/update-landlord.dto';
 import { ILandlord, Landlord } from '../model/landlord.model';
 import * as sgMail from '@sendgrid/mail';
 import { EmailReq } from '../dto/email.dto';
-import env from 'config/env';
+import env from '../../../config/env';
 @Injectable()
 export class LandlordService {
   constructor(

@@ -6,7 +6,7 @@ import { LandlordModule } from './landlord/landlord.module';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProofModule } from './proof/proof.module';
-import env from 'config/env';
+import env from '../config/env';
 import { AuthMiddleware } from './auth/middleware/auth.middleware';
 import { HouseController } from './house/controller/house.controller';
 import { LandlordController } from './landlord/controller/landlord.controller';

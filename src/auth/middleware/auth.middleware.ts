@@ -4,9 +4,9 @@ import {
   NestMiddleware,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuthService } from 'src/auth/service/auth.service';
-import { LandlordService } from 'src/landlord/service/landlord.service';
-import { TenantService } from 'src/tenant/service/tenant.service';
+import { LandlordService } from '../../landlord/service/landlord.service';
+import { TenantService } from '../../tenant/service/tenant.service';
+import { AuthService } from '../service/auth.service';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
