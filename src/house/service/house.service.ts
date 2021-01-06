@@ -27,7 +27,7 @@ export class HouseService {
       name: createHouseDto.name,
       address: createHouseDto.address,
       currentRentalContract: undefined,
-      _occupant: undefined,
+      _occupant: createHouseDto._occupant,
       _owner: landlordId,
     });
     return newHouse.save();
