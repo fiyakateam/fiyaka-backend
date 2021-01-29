@@ -16,10 +16,10 @@ import { HouseService } from '../service/house.service';
 import { CreateHouseDto } from '../dto/create-house.dto';
 import { UpdateHouseDto } from '../dto/update-house.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Tenant } from 'src/tenant/model/tenant.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { HouseEntity } from '../dto/houseentity.dto';
+import { Tenant } from '../../tenant/model/tenant.model';
 
 @ApiTags('house')
 @ApiBearerAuth()
@@ -51,7 +51,6 @@ export class HouseController {
     if (!houses) {
       throw new NotFoundException(`Houses not found`);
     }
-    console.log(houses);
     return houses;
   }
 

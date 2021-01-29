@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './service/auth.service';
-import { AuthController } from './controller/auth.controller';
-import { LandlordModule } from 'src/landlord/landlord.module';
-import { TenantModule } from 'src/tenant/tenant.module';
 import { JwtModule } from '@nestjs/jwt';
-import env from 'config/env';
+import env from '../../config/env';
+import { LandlordModule } from '../landlord/landlord.module';
+import { TenantModule } from '../tenant/tenant.module';
+import { AuthController } from './controller/auth.controller';
+import { AuthService } from './service/auth.service';
 @Module({
   controllers: [AuthController],
   providers: [AuthService],

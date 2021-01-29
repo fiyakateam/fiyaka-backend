@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateLandlordDto } from 'src/landlord/dto/create-landlord.dto';
+import { CreateLandlordDto } from '../../landlord/dto/create-landlord.dto';
 import { AuthPostReq, AuthPostRes } from '../dto/auth-post.dto';
 import { AuthService } from '../service/auth.service';
 

@@ -1,7 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { ILandlord } from 'src/landlord/model/landlord.model';
-import { ITenant } from 'src/tenant/model/tenant.model';
+import { ILandlord } from '../../landlord/model/landlord.model';
+import { ITenant } from '../../tenant/model/tenant.model';
 
 @Schema()
 export class House extends Document {
