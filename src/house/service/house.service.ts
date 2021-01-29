@@ -1,7 +1,8 @@
-import { Dependencies, Injectable } from '@nestjs/common';
+import { Dependencies, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { LandlordService } from '../../landlord/service/landlord.service';
+import { TenantEntity } from '../../tenant/dto/tenantentity.dto';
 import { Tenant } from '../../tenant/model/tenant.model';
 import { TenantService } from '../../tenant/service/tenant.service';
 import { CreateHouseDto } from '../dto/create-house.dto';
@@ -10,12 +11,12 @@ import { UpdateHouseDto } from '../dto/update-house.dto';
 import { House, IHouse } from '../model/house.model';
 
 @Injectable()
-@Dependencies(LandlordService, TenantService)
+@Dependencies(TenantService)
 export class HouseService {
   constructor(
+    private readonly tenantService: TenantService,
     @InjectModel('House') private readonly houseModel: Model<House>,
-    @InjectModel('Tenant') private readonly tenantModel: Model<Tenant>,
-    private readonly tenantService: TenantService
+    @InjectModel('Tenant') private readonly tenantModel: Model<Tenant>
   ) {}
 
   public async create(
@@ -45,14 +46,18 @@ export class HouseService {
     userId: string,
     userRole: string
   ): Promise<HouseEntity | undefined> {
-    const house =
-      userRole === 'landlord'
-        ? await this.houseModel.findOne({ _id: id, _owner: userId })
-        : await this.houseModel.findOne({ _id: id, _occupant: userId });
+    try {
+      const house =
+        userRole === 'landlord'
+          ? await this.houseModel.findOne({ _id: id, _owner: userId })
+          : await this.houseModel.findOne({ _id: id, _occupant: userId });
 
-    //const tenant = await this.tenantService.findOne(house._occupant);
-    const houseEnt = await this.sanitize(house);
-    return houseEnt;
+      //const tenant = await this.tenantService.findOne(house._occupant);
+      const houseEnt = await this.sanitize(house);
+      return houseEnt;
+    } catch (e) {
+      return null;
+    }
   }
 
   public async update(
@@ -60,15 +65,19 @@ export class HouseService {
     updateHouseDto: UpdateHouseDto,
     userId: string
   ): Promise<IHouse> {
-    const house = await this.houseModel.findOneAndUpdate(
-      {
-        _id: id,
-        _owner: userId,
-      },
-      updateHouseDto
-    );
+    try {
+      const house = await this.houseModel.findOneAndUpdate(
+        {
+          _id: id,
+          _owner: userId,
+        },
+        updateHouseDto
+      );
 
-    return house;
+      return house;
+    } catch (e) {
+      return null;
+    }
   }
 
   public async remove(id: string, userId: string): Promise<any> {
@@ -91,7 +100,7 @@ export class HouseService {
   }
 
   private async sanitize(house: House): Promise<HouseEntity> {
-    const occupant = await this.findOne({ _id: house._occupant });
+    const occupant = await this.tenantService.findOne(house._occupant);
     return {
       _id: house._id,
       name: house.name,

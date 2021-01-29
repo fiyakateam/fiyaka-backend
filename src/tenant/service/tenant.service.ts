@@ -44,10 +44,7 @@ export class TenantService {
 
   async findOne(id: string): Promise<TenantEntity | undefined> {
     const tenant = await this.tenantModel.findOne({ _id: id });
-
-    if (!tenant) {
-      throw new NotFoundException(`Tenant #${id} not found`);
-    }
+    if (!tenant) return;
     return this.sanitize(tenant);
   }
 

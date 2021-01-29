@@ -32,7 +32,6 @@ export class TenantController {
       throw new UnauthorizedException();
     }
     if (await this.tenantService.findOneEmail(createTenantReq.email)) {
-      console.log(createTenantReq.email);
       throw new BadRequestException();
     }
     return await this.tenantService.create(req.user._id, createTenantReq);
@@ -43,7 +42,6 @@ export class TenantController {
     if (req.user.role != 'landlord') {
       throw new UnauthorizedException();
     }
-    console.log(req.user._id);
     return await this.tenantService.findAll(req.user._id);
   }
 

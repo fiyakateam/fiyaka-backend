@@ -6,8 +6,6 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import { UpdateTenantDto } from '../src/tenant/dto/update-tenant.dto';
 import { CreateLandlordDto } from '../src/landlord/dto/create-landlord.dto';
 import axios from 'axios';
-import { Test } from '@nestjs/testing';
-import { AppModule } from '../src/app.module';
 
 describe('TENANT', () => {
   const tenant1: CreateTenantReq = {

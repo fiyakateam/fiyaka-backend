@@ -51,7 +51,6 @@ export class HouseController {
     if (!houses) {
       throw new NotFoundException(`Houses not found`);
     }
-    console.log(houses);
     return houses;
   }
 
