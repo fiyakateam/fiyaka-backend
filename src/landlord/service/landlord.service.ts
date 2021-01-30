@@ -34,10 +34,6 @@ export class LandlordService {
     return landlord;
   }
 
-  update(id: string, updateLandlordDto: UpdateLandlordDto) {
-    return `This action updates a #${id} landlord`;
-  }
-
   public async remove(id: string) {
     const deletedLandlord = await this.landlordModel.findByIdAndRemove(id);
     return deletedLandlord;
