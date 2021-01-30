@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  BadRequestException,
-} from '@nestjs/common';
+import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
 import { LandlordService } from '../service/landlord.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { EmailReq } from '../dto/email.dto';

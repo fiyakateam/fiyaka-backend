@@ -10,6 +10,7 @@ import { AuthMiddleware } from './auth/middleware/auth.middleware';
 import { HouseController } from './house/controller/house.controller';
 import { LandlordController } from './landlord/controller/landlord.controller';
 import { TenantController } from './tenant/controller/tenant.controller';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -18,12 +19,13 @@ import { TenantController } from './tenant/controller/tenant.controller';
     TenantModule,
     AuthModule,
     MongooseModule.forRoot(env.mongoURL),
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [],
 })
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
+  configure(consumer: MiddlewareConsumer): void {
     consumer
       .apply(AuthMiddleware)
       .forRoutes(HouseController, LandlordController, TenantController);
