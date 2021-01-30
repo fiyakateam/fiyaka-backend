@@ -1,14 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types, Schema as MongooseSchema } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Message } from '../dto/message.dto';
 
 @Schema()
 export class Conversation extends Document {
-  @Prop({ type: MongooseSchema.Types.ObjectId })
-  tenant: Types.ObjectId;
+  @Prop({ required: true, type: MongooseSchema.Types.ObjectId })
+  tenant: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId })
-  landlord: Types.ObjectId;
+  @Prop({ required: true, type: MongooseSchema.Types.ObjectId })
+  landlord: string;
 
   @Prop()
   messages: Message[];
