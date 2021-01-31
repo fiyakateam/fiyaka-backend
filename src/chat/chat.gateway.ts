@@ -59,7 +59,10 @@ export class ChatGateway implements OnGatewayConnection {
     client: Socket,
     @MessageBody() msg: MessagePostDTO
   ): Promise<void> {
-    const data = await this.chatService.sendMessage(client, msg);
-    client.emit('message', data.tenant);
+    const data = await this.chatService.sendMessage(msg);
+    if (!data) {
+      throw new UnauthorizedException();
+    }
+    this.server.to(data.tenant).emit('message', data);
   }
 }
