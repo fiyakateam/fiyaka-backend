@@ -59,12 +59,7 @@ export class ChatService {
       );
       return conv;
     } catch (e) {
-      const newConv = new this.conversationModel({
-        landlord,
-        tenant,
-        messages: [[createdMsg]],
-      });
-      return newConv.save();
+      return null;
     }
   }
 }

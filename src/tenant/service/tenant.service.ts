@@ -10,10 +10,13 @@ import { TenantEntity } from '../dto/tenantentity.dto';
 import { UpdateTenantDto } from '../dto/update-tenant.dto';
 import { Tenant } from '../model/tenant.model';
 import { hash } from 'bcrypt';
+import { Conversation } from '../../chat/model/conversation.model';
 @Injectable()
 export class TenantService {
   constructor(
-    @InjectModel('Tenant') private readonly tenantModel: Model<Tenant>
+    @InjectModel('Tenant') private readonly tenantModel: Model<Tenant>,
+    @InjectModel('Conversation')
+    private readonly conversationModel: Model<Conversation>
   ) {}
   async create(
     landlordid: string,
@@ -32,6 +35,7 @@ export class TenantService {
     });
     try {
       const tenantData = await tenant.save();
+      await this.createConversation(landlordid, tenantData.id);
       return {
         tenant: this.sanitize(tenantData),
         password,
@@ -39,6 +43,14 @@ export class TenantService {
     } catch (e) {
       throw new BadRequestException(e);
     }
+  }
+
+  async createConversation(
+    landlord: string,
+    tenant: string
+  ): Promise<Conversation> {
+    const conv = new this.conversationModel({ landlord, tenant, messages: [] });
+    return conv.save();
   }
 
   async findAll(landlordid: string): Promise<TenantEntity[] | undefined> {
