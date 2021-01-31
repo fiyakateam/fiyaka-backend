@@ -43,10 +43,7 @@ export class ChatService {
     return this.authService.verifyToken(token);
   }
 
-  async sendMessage(
-    client: Socket,
-    msg: MessagePostDTO
-  ): Promise<Conversation> {
+  async sendMessage(msg: MessagePostDTO): Promise<Conversation> {
     const id = this.getUserID(msg.token);
     if (!id) {
       return null;
